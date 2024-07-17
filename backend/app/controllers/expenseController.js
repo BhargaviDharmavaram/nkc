@@ -15,13 +15,17 @@ expenseController.addExpense = async (req, res) => {
             amount
         });
         const expenseRes = await expense.save();
+        // Calculate total expenses for the month of the added expense
+        const { totalAmount } = await calculateExpensesForMonth(parseInt(month), parseInt(year));
 
-        // Recalculate daily total expenses after adding expense
-        // const totalExpenses = await calculateDailyTotalExpenses();
-        // console.log('total expense', totalExpenses)
         // Populate the category and user details
-        const populatedExpense = await Expense.findById(expenseRes._id).populate('category', 'name').populate('user','name');
-        res.json({ message: 'Expense added successfully', expense: populatedExpense });
+        const populatedExpense = await Expense.findById(expenseRes._id).populate('category', 'name').populate('user', 'name');
+        
+        res.json({ message: 'Expense added successfully', expense: populatedExpense, totalAmount });
+
+        // Populate the category and user details
+        // const populatedExpense = await Expense.findById(expenseRes._id).populate('category', 'name').populate('user','name');
+        // res.json({ message: 'Expense added successfully', expense: populatedExpense });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -33,6 +37,7 @@ expenseController.getExpenses = async (req, res) => {
         const expenses = await Expense.find().populate('category user');
         // const totalExpenses = await calculateDailyTotalExpenses();
         // console.log('total expense-get', totalExpenses)
+        
         res.json({ expenses: expenses });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -53,10 +58,10 @@ expenseController.updateExpense = async (req, res) => {
         if (!updatedExpense) {
             return res.status(404).json({ error: 'Expense not found' });
         }
-        // Recalculate daily total expenses after updating expense
-        //const totalExpenses = await calculateDailyTotalExpenses();
+        // Calculate total expenses for the month of the added expense
+        const { totalAmount } = await calculateExpensesForMonth(parseInt(month), parseInt(year));
 
-        res.json({ message: 'Expense updated successfully', expense: updatedExpense });
+        res.json({ message: 'Expense updated successfully', expense: updatedExpense, totalAmount });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -70,8 +75,6 @@ expenseController.removeExpense = async (req, res) => {
         if (!expense) {
             return res.status(404).json({ error: 'Expense not found' });
         }
-        // Recalculate daily total expenses after removing expense
-        //const totalExpenses = await calculateDailyTotalExpenses();
 
         res.json({ message: 'Expense removed successfully' });
     } catch (error) {
@@ -225,6 +228,21 @@ expenseController.getTotalExpenses = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+//API endpoint to get total expenses for the current month
+expenseController.getCurrentMonthTotalExpenses = async (req, res) => {
+    try {
+        const now = new Date();
+        const currentMonth = now.getMonth() + 1; // getMonth() is zero-based
+        const currentYear = now.getFullYear();
+
+        const { totalAmount, breakdown } = await calculateExpensesForMonth(currentMonth, currentYear);
+        res.json({ month: currentMonth, year: currentYear, totalAmount, breakdown });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 
 
 module.exports = expenseController;

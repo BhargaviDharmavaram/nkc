@@ -145,4 +145,19 @@ nkcProductsOrdersController.getTotalProductOrders = async (req, res) => {
     }
 };
 
+// Get total NKC orders amount for the current month
+nkcProductsOrdersController.getCurrentMonthTotalNKCOrders = async (req, res) => {
+    try {
+        const now = new Date();
+        const currentMonth = now.getMonth() + 1;
+        const currentYear = now.getFullYear();
+
+        const { totalAmount } = await calculateProductOrdersForMonth(currentMonth, currentYear);
+
+        res.json({ month: currentMonth, year: currentYear, totalAmount });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = nkcProductsOrdersController;

@@ -26,18 +26,19 @@ app.get('/api/get-expenses', expenseController.getExpenses);
 app.put('/api/update-expenses/:id', expenseController.updateExpense);
 app.delete('/api/delete-expenses/:id', expenseController.removeExpense);
 app.get('/api/total-expenses', expenseController.getTotalExpenses);
+app.get('/api/current-month-total-expenses', expenseController.getCurrentMonthTotalExpenses)
 
 app.post('/api/add-productsOrders', nkcProductsOrdersController.addProductsOrder);
 app.get('/api/get-productsOrders', nkcProductsOrdersController.getProductsOrders);
 app.put('/api/update-productsOrders/:id', nkcProductsOrdersController.updateProductsOrders);
 app.delete('/api/delete-productsOrders/:id', nkcProductsOrdersController.removeProductOrder);
-app.get('/api/get-total-orders-amount',nkcProductsOrdersController.getTotalProductOrders)
+app.get('/api/get-total-orders-amount',nkcProductsOrdersController.getTotalProductOrders);
+app.get('/api/current-month-total-orders-amount', nkcProductsOrdersController.getCurrentMonthTotalNKCOrders)
 
 // POST route to add daily earnings
 app.post('/api/add-daily-earnings', dailyEarningsController.addDailyEarnings);
-
+app.get('/api/get-earnings', dailyEarningsController.getAllEarnings)
 // GET route to get total earnings
-//app.get('/api/get-total-earnings', dailyEarningsController.getTotalEarnings);
 app.get('/api/get-total-earnings-based-on-year-or-month',dailyEarningsController.getTotalEarningsBasedOnYearOrMonth)
 
 const port = 3777

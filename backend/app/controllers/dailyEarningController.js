@@ -1,86 +1,3 @@
-// const DailyEarnings = require('../models/dailyEarningsModel');
-
-// const dailyEarningsController = {};
-
-// // Add daily earnings
-// dailyEarningsController.addDailyEarnings = async (req, res) => {
-//     try {
-//         const { date, amount } = req.body;
-//         const existingEntry = await DailyEarnings.findOne({ date });
-
-//         if (existingEntry) {
-//             // Update existing entry if date already exists
-//             existingEntry.amount = amount;
-//             await existingEntry.save();
-//             res.json({ message: 'Daily earnings updated successfully', dailyEarnings: existingEntry });
-//         } else {
-//             // Create new entry if date does not exist
-//             const newDailyEarnings = new DailyEarnings({ date, amount });
-//             const savedEntry = await newDailyEarnings.save();
-//             res.json({ message: 'Daily earnings added successfully', dailyEarnings: savedEntry });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ error: error.message });
-//     }
-// };
-
-// // Get total earnings
-// dailyEarningsController.getTotalEarnings = async (req, res) => {
-//     try {
-//         const totalEarnings = await DailyEarnings.aggregate([
-//             {
-//                 $group: {
-//                     _id: null,
-//                     totalAmount: { $sum: '$amount' }
-//                 }
-//             }
-//         ]);
-
-//         if (totalEarnings.length > 0) {
-//             res.json({ totalAmount: totalEarnings[0].totalAmount });
-//         } else {
-//             res.json({ totalAmount: 0 });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ error: error.message });
-//     }
-// };
-
-// // Get total earnings for a specific month and year
-// dailyEarningsController.getTotalEarningsBasedOnYearOrMonth = async (req, res) => {
-//     try {
-//         const { month, year } = req.query;
-
-//         // Create date range for the selected month and year
-//         const startDate = new Date(year, month - 1, 1);
-//         const endDate = new Date(year, month, 0, 23, 59, 59, 999);
-
-//         const totalEarnings = await DailyEarnings.aggregate([
-//             {
-//                 $match: {
-//                     date: { $gte: startDate, $lte: endDate }
-//                 }
-//             },
-//             {
-//                 $group: {
-//                     _id: null,
-//                     totalAmount: { $sum: '$amount' }
-//                 }
-//             }
-//         ]);
-
-//         if (totalEarnings.length > 0) {
-//             res.json({ totalAmount: totalEarnings[0].totalAmount });
-//         } else {
-//             res.json({ totalAmount: 0 });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ error: error.message });
-//     }
-// };
-
-// module.exports = dailyEarningsController;
-
 const DailyEarnings = require('../models/dailyEarningsModel');
 
 const dailyEarningsController = {};
@@ -138,38 +55,14 @@ dailyEarningsController.addDailyEarnings = async (req, res) => {
     }
 };
 
-// // Get total earnings for a specific month and year
-// dailyEarningsController.getTotalEarningsBasedOnYearOrMonth = async (req, res) => {
-//     try {
-//         const { month, year } = req.query;
-
-//         // Create date range for the selected month and year
-//         const startDate = new Date(year, month - 1, 1);
-//         const endDate = new Date(year, month, 0, 23, 59, 59, 999);
-
-//         const totalEarnings = await DailyEarnings.aggregate([
-//             {
-//                 $match: {
-//                     date: { $gte: startDate, $lte: endDate }
-//                 }
-//             },
-//             {
-//                 $group: {
-//                     _id: null,
-//                     totalAmount: { $sum: '$amount' }
-//                 }
-//             }
-//         ]);
-
-//         if (totalEarnings.length > 0) {
-//             res.json({ totalAmount: totalEarnings[0].totalAmount });
-//         } else {
-//             res.json({ totalAmount: 0 });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ error: error.message });
-//     }
-// };
+dailyEarningsController.getAllEarnings = async (req, res) =>{
+    try {
+        const earnings = await DailyEarnings.find()
+        res.json({earnings : earnings})
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
 
 // Get total earnings for a specific month and year
 dailyEarningsController.getTotalEarningsBasedOnYearOrMonth = async (req, res) => {
