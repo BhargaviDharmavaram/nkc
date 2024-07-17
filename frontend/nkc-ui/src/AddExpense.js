@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
-import Swal from 'sweetalert2';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -43,12 +41,13 @@ const AddExpense = (props) => {
 
         try {
             if (isEditMode && currentExpense && currentExpense._id) {
-                const response = await axios.put(`http://localhost:3777/api/update-expenses/${currentExpense._id}`, formData);
-                Swal.fire({
-                    icon: 'success',
-                    title: response.data.message
-                });
-                onEditSubmit(response.data.expense);
+                // const response = await axios.put(`http://localhost:3777/api/update-expenses/${currentExpense._id}`, formData);
+                // Swal.fire({
+                //     icon: 'success',
+                //     title: response.data.message
+                // });
+                // onEditSubmit(response.data.expense);
+                onEditSubmit({ ...formData, _id: currentExpense._id });
             } else {
                 addExpense(formData);
             }

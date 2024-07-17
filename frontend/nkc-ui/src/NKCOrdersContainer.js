@@ -42,28 +42,32 @@ const NKCOrdersContainer = () => {
         }
     };
 
-    const updateOrder = async (orderId, updatedOrder) => {
-        try {
-            const response = await axios.put(`http://localhost:3777/api/update-productsOrders/${orderId}`, updatedOrder);
-            const updatedOrders = orders.map(order => {
-                if (order._id === orderId) {
-                    return response.data.productOrder;
-                }
-                return order;
-            });
-            setOrders(updatedOrders);
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: 'Product order updated successfully'
-            });
-        } catch (error) {
-            console.error('Error updating order:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while updating the product order'
-            });
+    const editOrder = async (orderId, currentDate, currentAmount) => {
+        const newDate = prompt('Enter the new order date:', currentDate);
+        const newAmount = prompt('Enter the new order amount:', currentAmount);
+        if (newDate && newAmount) {
+            try {
+                const updatedOrder = { date: newDate, amount: newAmount };
+                const response = await axios.put(`http://localhost:3777/api/update-productsOrders/${orderId}`, updatedOrder);
+                const updatedOrders = orders.map(order => {
+                    if (order._id === orderId) {
+                        return response.data.productOrder;
+                    }
+                    return order;
+                });
+                setOrders(updatedOrders);
+                Swal.fire({
+                    icon: 'success',
+                    title: response.data.message,
+                });
+            } catch (error) {
+                console.error('Error updating order:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while updating the product order',
+                });
+            }
         }
     };
 
@@ -71,7 +75,7 @@ const NKCOrdersContainer = () => {
         <div>
             <h2>Total NKC Orders - {orders.length}</h2>
             <AddNKCOrdersForm addOrder={addOrder} />
-            <NKCOrdersList orders={orders} removeOrder={removeOrder} updateOrder={updateOrder}/>
+            <NKCOrdersList orders={orders} removeOrder={removeOrder} editOrder={editOrder}/>
             <Link to="/">Back to Dashboard</Link>
         </div>
     );

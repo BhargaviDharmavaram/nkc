@@ -1,6 +1,6 @@
 import React from 'react';
 
-const NKCOrdersList = ({ orders, removeOrder, updateOrder }) => {
+const NKCOrdersList = ({ orders, removeOrder, editOrder }) => {
 
     return (
         <div>
@@ -21,7 +21,7 @@ const NKCOrdersList = ({ orders, removeOrder, updateOrder }) => {
                             <td>{new Date(order.date).toISOString().split('T')[0]}</td>
                             <td>{order.amount}</td>
                             <td>
-                                <button onClick={() => updateOrder(order._id, order)}>Edit</button>
+                                <button onClick={() => editOrder(order._id, new Date(order.date).toISOString().split('T')[0], order.amount)}>Edit</button>
                                 <button onClick={() => removeOrder(order._id)}>Remove</button>
                             </td>
                         </tr>

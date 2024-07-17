@@ -50,6 +50,7 @@ const ExpensesContainer = () => {
     const addExpense = async (newExpenseData) => {
         try {
             const response = await axios.post('http://localhost:3777/api/add-expenses', newExpenseData);
+            console.log(response.data,'res-while-adding-expense')
             Swal.fire({
                 icon: 'success',
                 title: response.data.message,
@@ -96,6 +97,26 @@ const ExpensesContainer = () => {
         setEditMode(true);
     };
 
+    // const handleEditSubmit = async (updatedExpense) => {
+    //     try {
+    //         const response = await axios.put(`http://localhost:3777/api/update-expenses/${updatedExpense._id}`, updatedExpense);
+    //         Swal.fire({
+    //             icon: 'success',
+    //             title: response.data.message
+    //         });
+    //         console.log(response.data, 'while-updating-expense-in container comp')
+    //         setExpenses(expenses.map(expense => (expense._id === updatedExpense._id ? response.data.expense : expense)));
+    //         setEditMode(false);
+    //         setCurrentExpense(null);
+    //     } catch (error) {
+    //         console.error('Error updating expense:', error);
+    //     }
+    // };
+
+    // const handleCancelEdit = () => {
+    //     setEditMode(false);
+    //     setCurrentExpense(null);
+    // };
     const handleEditSubmit = async (updatedExpense) => {
         try {
             const response = await axios.put(`http://localhost:3777/api/update-expenses/${updatedExpense._id}`, updatedExpense);
@@ -115,7 +136,6 @@ const ExpensesContainer = () => {
         setEditMode(false);
         setCurrentExpense(null);
     };
-
     const handleMonthChange = (date) => {
         setSelectedMonth(date);
     };
