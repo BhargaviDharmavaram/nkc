@@ -3,7 +3,7 @@ import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const TotalExpensesList = () => {
+const TotalNKCOrdersList = () => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [selectedYear, setSelectedYear] = useState(null);
@@ -11,14 +11,9 @@ const TotalExpensesList = () => {
     const [breakdown, setBreakdown] = useState([]);
     const [selectedLabel, setSelectedLabel] = useState(''); // State to store selected label dynamically
 
-    // useEffect(() => {
-    //     // Fetch total expenses when the component mounts initially
-    //     fetchTotalExpenses(null, null, null);
-    // }, []);
-
-    const fetchTotalExpenses = async (date, month, year) => {
+    const fetchTotalOrders = async (date, month, year) => {
         try {
-            const response = await axios.get('http://localhost:3777/api/total-expenses', {
+            const response = await axios.get('http://localhost:3777/api/get-total-orders-amount', {
                 params: { date, month, year }
             });
             setTotalAmount(response.data.totalAmount);
@@ -26,16 +21,16 @@ const TotalExpensesList = () => {
 
             // Set the selected label dynamically based on what was selected
             if (date) {
-                setSelectedLabel(`Total expenses for Date - ${date}`);
+                setSelectedLabel(`Total orders for Date - ${date}`);
             } else if (month) {
                 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                                     'July', 'August', 'September', 'October', 'November', 'December'];
-                setSelectedLabel(`Total expenses for the Month - ${monthNames[month - 1]}`);
+                setSelectedLabel(`Total orders for the Month - ${monthNames[month - 1]}`);
             } else if (year) {
-                setSelectedLabel(`Total expenses for the Year - ${year}`);
+                setSelectedLabel(`Total orders for the Year - ${year}`);
             }
         } catch (error) {
-            console.error('Error fetching total expenses:', error);
+            console.error('Error fetching total orders:', error);
         }
     };
 
@@ -44,7 +39,7 @@ const TotalExpensesList = () => {
         setSelectedMonth(null);
         setSelectedYear(null);
         const formattedDate = date ? new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())).toISOString().split('T')[0] : null;
-        fetchTotalExpenses(formattedDate, null, null);
+        fetchTotalOrders(formattedDate, null, null);
     };
 
     const handleMonthChange = (date) => {
@@ -53,7 +48,7 @@ const TotalExpensesList = () => {
         setSelectedYear(null);
         const month = date ? date.getMonth() + 1 : null;
         const year = date ? date.getFullYear() : null;
-        fetchTotalExpenses(null, month, year);
+        fetchTotalOrders(null, month, year);
     };
 
     const handleYearChange = (date) => {
@@ -61,12 +56,12 @@ const TotalExpensesList = () => {
         setSelectedDate(null);
         setSelectedMonth(null);
         const year = date ? date.getFullYear() : null;
-        fetchTotalExpenses(null, null, year);
+        fetchTotalOrders(null, null, year);
     };
 
     return (
         <div>
-            <h1>Expense Summary</h1>
+            <h1>Total NKC Orders Summary</h1>
             <div>
                 <label>Select Date: </label>
                 <DatePicker
@@ -95,15 +90,15 @@ const TotalExpensesList = () => {
             </div>
             {totalAmount === null ? (
                 <div>
-                    <p>Select a date, month, or year to see total expenses.</p>
+                    <p>Select a date, month, or year to see total orders.</p>
                 </div>
             ) : (
                 <div>
                     <h2>{selectedLabel}: {totalAmount}</h2>
                     <ul>
-                        {breakdown.map(expense => (
-                            <li key={expense._id}>
-                                {expense.category.name}: {expense.totalAmount}
+                        {breakdown.map(order => (
+                            <li key={order._id}>
+                                {new Date(order.date).toISOString().split('T')[0]}: {order.amount}
                             </li>
                         ))}
                     </ul>
@@ -113,4 +108,4 @@ const TotalExpensesList = () => {
     );
 };
 
-export default TotalExpensesList;
+export default TotalNKCOrdersList;
