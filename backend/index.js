@@ -6,6 +6,7 @@ const categoryController = require('./app/controllers/categoryController')
 const expenseController = require('./app/controllers/expenseController')
 const nkcProductsOrdersController = require('./app/controllers/nkcProductsOrdersController')
 const dailyEarningsController = require('./app/controllers/dailyEarningController')
+const summaryController = require('./app/controllers/summaryController')
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -40,6 +41,10 @@ app.post('/api/add-daily-earnings', dailyEarningsController.addDailyEarnings);
 app.get('/api/get-earnings', dailyEarningsController.getAllEarnings)
 // GET route to get total earnings
 app.get('/api/get-total-earnings-based-on-year-or-month',dailyEarningsController.getTotalEarningsBasedOnYearOrMonth)
+
+
+app.get('/api/summary/year', summaryController.getDataForYear);
+app.get('/api/summary/month', summaryController.getDataForMonth);
 
 const port = 3777
 app.listen(port,()=>{
