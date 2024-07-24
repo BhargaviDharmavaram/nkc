@@ -8,10 +8,13 @@ import {
     TableRow,
     Paper,
     TablePagination,
-    Typography
+    Typography,
+    IconButton
 } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const EarningsList = ({earnings}) => {
+const EarningsList = ({earnings, removeEarning, editEarning}) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -42,6 +45,7 @@ const EarningsList = ({earnings}) => {
                                     <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>S.No</TableCell>
                                     <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>Date</TableCell>
                                     <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>Amount</TableCell>
+                                    <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>Actions</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -50,6 +54,23 @@ const EarningsList = ({earnings}) => {
                                         <TableCell style={{ fontSize: '20px' }}>{page * rowsPerPage + index + 1}</TableCell>
                                         <TableCell style={{ fontSize: '20px' }}>{new Date(earning.date).toISOString().split('T')[0]}</TableCell>
                                         <TableCell style={{ fontSize: '20px' }}>{earning.amount}</TableCell>
+                                        <TableCell style={{ fontSize: '20px' }}>
+                                            <IconButton
+                                                color="primary"
+                                                size="small"
+                                                onClick={() => (editEarning(earning._id, earning.amount))}
+                                                style={{ marginRight: '5px' }}
+                                            >
+                                                <EditIcon />
+                                            </IconButton>
+                                            <IconButton
+                                                color="secondary"
+                                                size="small"
+                                                onClick={() => removeEarning(earning._id)}
+                                            >
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                                 {emptyRows > 0 && (

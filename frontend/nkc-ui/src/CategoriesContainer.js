@@ -9,11 +9,13 @@ import {
     Typography,
     Paper,
     Button,
-    Box
+    Box,
+    TextField
 } from '@mui/material';
 
 const CategoriesContainer = () => {
     const [categories, setCategories] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -85,6 +87,14 @@ const CategoriesContainer = () => {
         }
     };
 
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const filteredCategories = categories.filter(category =>
+        category.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <Container maxWidth="md">
             <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
@@ -92,7 +102,19 @@ const CategoriesContainer = () => {
                     Categories Form
                 </Typography>
                 <AddCategory addCategory={addCategory} />
-                <CategoriesList categories={categories} removeCategory={removeCategory} editCategory={editCategory} />
+                <TextField
+                    label="Search Categories"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                />
+                <CategoriesList 
+                    categories={filteredCategories} 
+                    removeCategory={removeCategory} 
+                    editCategory={editCategory} 
+                />
                 <Box marginTop={2}>
                     <Button
                         component={Link}

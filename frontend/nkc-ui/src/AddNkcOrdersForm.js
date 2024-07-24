@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Box, Button, TextField, Typography } from '@mui/material';
 
 const AddNKCOrdersForm = ({ addOrder }) => {
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState();
     const [amount, setAmount] = useState('');
 
     const handleDateChange = (selectedDate) => {

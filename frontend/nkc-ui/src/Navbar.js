@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, TextField, IconButton, InputAdornment, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useNavigate } from 'react-router-dom';
 import Breadcrumbs from './BreadCrumbs';
+import { useTheme } from '@mui/material/styles';
 
-const NavBar = () => {
+const NavBar = ({ onToggleTheme }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleSearch = () => {
     if (searchTerm) {
@@ -34,11 +37,14 @@ const NavBar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ mb: 2, backgroundColor: 'white' }}>
+    <AppBar position="static" sx={{ mb: 2, backgroundColor: theme.palette.background.paper }}>
       <Toolbar>
         <Box sx={{ display: 'flex', flexGrow: 1, alignItems: 'center' }}>
           <Breadcrumbs />
         </Box>
+        <IconButton onClick={onToggleTheme}>
+          <DarkModeIcon />
+        </IconButton>
         <TextField
           variant="outlined"
           placeholder="Search here..."
@@ -57,7 +63,7 @@ const NavBar = () => {
               </InputAdornment>
             ),
           }}
-          sx={{ bgcolor: 'white', '& .MuiOutlinedInput-root': { bgcolor: 'white' } }}
+          sx={{ bgcolor: theme.palette.background.paper, '& .MuiOutlinedInput-root': { bgcolor: theme.palette.background.paper } }}
         />
       </Toolbar>
     </AppBar>

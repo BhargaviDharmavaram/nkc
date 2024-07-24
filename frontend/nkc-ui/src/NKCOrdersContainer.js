@@ -4,18 +4,24 @@ import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 import AddNKCOrdersForm from "./AddNkcOrdersForm";
 import NKCOrdersList from "./NKCOrdersList";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
     Container,
     Typography,
     Paper,
     Button,
-    Box
+    Box,
+    TextField
 } from '@mui/material';
 
 const NKCOrdersContainer = () => {
     const [orders, setOrders] = useState([]);
+    const [searchMonth, setSearchMonth] = useState(null); // Use null for DatePicker
+    const [filteredOrders, setFilteredOrders] = useState([]);
 
-    useEffect(()=> {
+
+    useEffect(() => {
         const fetchOrders = async () => {
             try {
                 const response = await axios.get('http://localhost:3777/api/get-productsOrders');
@@ -28,9 +34,9 @@ const NKCOrdersContainer = () => {
 
         fetchOrders();
     }, []);
-    
+
     const addOrder = async (newOrder) => {
-        setOrders([...orders, newOrder])
+        setOrders([...orders, newOrder]);
     };
 
     const removeOrder = async (orderId) => {
@@ -92,6 +98,23 @@ const NKCOrdersContainer = () => {
         }
     };
 
+    const handleDateChange = (date) => {
+        setSearchMonth(date);
+    };
+
+    useEffect(() => {
+        if (searchMonth) {
+            const filtered = orders.filter(order => {
+                const orderDate = new Date(order.date);
+                return orderDate.getMonth() === searchMonth.getMonth() &&
+                       orderDate.getFullYear() === searchMonth.getFullYear();
+            });
+            setFilteredOrders(filtered);
+        } else {
+            setFilteredOrders(orders);
+        }
+    }, [searchMonth, orders]);
+
     return (
         <Container maxWidth="md">
             <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
@@ -99,7 +122,21 @@ const NKCOrdersContainer = () => {
                     NKC Orders Form
                 </Typography>
                 <AddNKCOrdersForm addOrder={addOrder} />
-                <NKCOrdersList orders={orders} removeOrder={removeOrder} editOrder={editOrder}/>
+                <Typography variant="h6">
+                    Select Month:
+                </Typography>
+                <DatePicker
+                    selected={searchMonth}
+                    onChange={handleDateChange}
+                    dateFormat="MM/yyyy"
+                    showMonthYearPicker
+                    customInput={<TextField variant="outlined" />}
+                />
+                <NKCOrdersList 
+                    orders={searchMonth ? filteredOrders : orders} 
+                    removeOrder={removeOrder} 
+                    editOrder={editOrder} 
+                />
                 <Box marginTop={2}>
                     <Button
                         component={Link}

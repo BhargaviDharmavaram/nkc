@@ -1,41 +1,43 @@
-import React,{useState, useEffect} from "react";
-import axios from 'axios'
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import AddUser from "./AddUser";
 import UsersList from "./UsersList";
 import Swal from 'sweetalert2';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import {
     Container,
     Typography,
     Paper,
     Button,
-    Box
+    Box,
+    TextField
 } from '@mui/material';
 
-const UsersContainer = (props) =>{
-    const [users,setUsers] = useState([])
+const UsersContainer = (props) => {
+    const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
-    useEffect(()=>{
-      axios.get('http://localhost:3777/api/get-users')
-          .then((res)=>{
-              console.log("users",res.data) // array of objects
-              setUsers(res.data)
+    useEffect(() => {
+        axios.get('http://localhost:3777/api/get-users')
+            .then((res) => {
+                console.log("users", res.data); // array of objects
+                setUsers(res.data);
             })
-          .catch((err)=>{
-              console.log(err.message)
-          })
-    },[])
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }, []);
 
     const addUser = (newUser) => {
-        setUsers([...users,newUser])
-    }
-    
+        setUsers([...users, newUser]);
+    };
+
     const removeUser = async (userId, userName) => {
         console.log('userId', userId, userName);
         Swal.fire({
             title: 'Are you sure?',
             icon: 'warning',
-            text: `Are you sure to remove the user name called as ${userName}?`,
+            text: `Are you sure to remove the user named "${userName}"?`,
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
@@ -60,7 +62,7 @@ const UsersContainer = (props) =>{
             }
         });
     };
-    
+
     const editUser = async (userId, currentUserName) => {
         const newName = prompt('Enter the new user name:', currentUserName);
         if (newName) {
@@ -82,15 +84,36 @@ const UsersContainer = (props) =>{
                 console.error('Error updating user:', error);
             }
         }
-    }
-    return(
+    };
+
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const filteredUsers = users.filter(user =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    return (
         <Container maxWidth="md">
             <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
                 <Typography variant="h4" gutterBottom>
                     User Form
                 </Typography>
                 <AddUser addUser={addUser} />
-                <UsersList users={users} removeUser={removeUser} editUser={editUser}/>
+                <TextField
+                    label="Search Users"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                />
+                <UsersList 
+                    users={filteredUsers} 
+                    removeUser={removeUser} 
+                    editUser={editUser} 
+                />
                 <Box marginTop={2}>
                     <Button
                         component={Link}
@@ -103,6 +126,7 @@ const UsersContainer = (props) =>{
                 </Box>
             </Paper>
         </Container>
-    )
-}
-export default UsersContainer
+    );
+};
+
+export default UsersContainer;

@@ -1,11 +1,12 @@
 import React from 'react';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Typography, Divider, Box, CssBaseline } from '@mui/material';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Typography, Divider, Box, CssBaseline, IconButton } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import CategoryIcon from '@mui/icons-material/Category';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacing(2),
-    backgroundColor: '#9C27B0',
+    //backgroundColor: '#d81b60',
   },
   title: {
     fontWeight: 'bold',
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Sidebar = () => {
+const Sidebar = ({ onToggleTheme }) => {
   const classes = useStyles();
   const location = useLocation();
 
@@ -128,7 +129,9 @@ const Sidebar = () => {
           </ListItem>
         </List>
         <Box className={classes.upgradeButton}>
-          NKC
+        <IconButton onClick={onToggleTheme}>
+            <DarkModeIcon  />
+          </IconButton>
         </Box>
       </Drawer>
     </>
