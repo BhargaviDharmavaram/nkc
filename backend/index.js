@@ -39,6 +39,8 @@ app.get('/api/current-month-total-orders-amount', nkcProductsOrdersController.ge
 // POST route to add daily earnings
 app.post('/api/add-daily-earnings', dailyEarningsController.addDailyEarnings);
 app.get('/api/get-earnings', dailyEarningsController.getAllEarnings)
+app.put('/api/update-earning/:id', dailyEarningsController.updateDailyEarnings)
+app.delete('/api/delete-earning/:id',dailyEarningsController.removeEarning)
 // GET route to get total earnings
 app.get('/api/get-total-earnings-based-on-year-or-month',dailyEarningsController.getTotalEarningsBasedOnYearOrMonth)
 
