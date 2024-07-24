@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Box, Typography, TextField, List, ListItem, ListItemText } from '@mui/material';
 
 const NKCOrdersSummary = () => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [selectedYear, setSelectedYear] = useState(null);
-    const [totalAmount, setTotalAmount] = useState(null); // Change initial state to null
+    const [totalAmount, setTotalAmount] = useState(null);
     const [breakdown, setBreakdown] = useState([]);
-    const [selectedLabel, setSelectedLabel] = useState(''); // State to store selected label dynamically
+    const [selectedLabel, setSelectedLabel] = useState('');
 
     const fetchTotalOrders = async (date, month, year) => {
         try {
@@ -19,12 +20,11 @@ const NKCOrdersSummary = () => {
             setTotalAmount(response.data.totalAmount);
             setBreakdown(response.data.breakdown);
 
-            // Set the selected label dynamically based on what was selected
             if (date) {
                 setSelectedLabel(`Total orders for Date - ${date}`);
             } else if (month) {
                 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                                    'July', 'August', 'September', 'October', 'November', 'December'];
+                    'July', 'August', 'September', 'October', 'November', 'December'];
                 setSelectedLabel(`Total orders for the Month - ${monthNames[month - 1]}`);
             } else if (year) {
                 setSelectedLabel(`Total orders for the Year - ${year}`);
@@ -60,51 +60,56 @@ const NKCOrdersSummary = () => {
     };
 
     return (
-        <div>
-            <h1>NKC Orders Summary</h1>
-            <div>
-                <label>Select Date: </label>
-                <DatePicker
-                    selected={selectedDate}
-                    onChange={handleDateChange}
-                    dateFormat="yyyy-MM-dd"
-                />
-            </div>
-            <div>
-                <label>Select Month: </label>
-                <DatePicker
-                    selected={selectedMonth}
-                    onChange={handleMonthChange}
-                    dateFormat="MM/yyyy"
-                    showMonthYearPicker
-                />
-            </div>
-            <div>
-                <label>Select Year: </label>
-                <DatePicker
-                    selected={selectedYear}
-                    onChange={handleYearChange}
-                    dateFormat="yyyy"
-                    showYearPicker
-                />
-            </div>
+        <Box display="flex" flexDirection="column" alignItems="center" p={3}>
+            <Typography variant="h4" gutterBottom>
+                NKC Orders Summary
+            </Typography>
+            <Box display="flex" flexDirection="column" alignItems="center" width="50%">
+                <Box mb={2} width="100%">
+                    <Typography variant="h6" gutterBottom>Select Date:</Typography>
+                    <DatePicker
+                        selected={selectedDate}
+                        onChange={handleDateChange}
+                        dateFormat="yyyy-MM-dd"
+                        customInput={<TextField fullWidth variant="outlined" />}
+                    />
+                </Box>
+                <Box mb={2} width="100%">
+                    <Typography variant="h6" gutterBottom>Select Month:</Typography>
+                    <DatePicker
+                        selected={selectedMonth}
+                        onChange={handleMonthChange}
+                        dateFormat="MM/yyyy"
+                        showMonthYearPicker
+                        customInput={<TextField fullWidth variant="outlined" />}
+                    />
+                </Box>
+                <Box mb={2} width="100%">
+                    <Typography variant="h6" gutterBottom>Select Year:</Typography>
+                    <DatePicker
+                        selected={selectedYear}
+                        onChange={handleYearChange}
+                        dateFormat="yyyy"
+                        showYearPicker
+                        customInput={<TextField fullWidth variant="outlined" />}
+                    />
+                </Box>
+            </Box>
             {totalAmount === null ? (
-                <div>
-                    <p>Select a date, month, or year to see total orders.</p>
-                </div>
+                <Typography variant="body1">Select a date, month, or year to see total orders.</Typography>
             ) : (
-                <div>
-                    <h2>{selectedLabel}: {totalAmount}</h2>
-                    <ul>
+                <Box mt={3} width="100%" textAlign="center">
+                    <Typography variant="h6">{selectedLabel}: {totalAmount}</Typography>
+                    <List>
                         {breakdown.map(order => (
-                            <li key={order._id}>
-                                {new Date(order.date).toISOString().split('T')[0]}: {order.amount}
-                            </li>
+                            <ListItem key={order._id}>
+                                <ListItemText primary={`${new Date(order.date).toISOString().split('T')[0]}: ${order.amount}`} />
+                            </ListItem>
                         ))}
-                    </ul>
-                </div>
+                    </List>
+                </Box>
             )}
-        </div>
+        </Box>
     );
 };
 

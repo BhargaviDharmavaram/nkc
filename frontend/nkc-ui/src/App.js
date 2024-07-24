@@ -1,10 +1,10 @@
+
 import React from "react";
 import Dashboard from "./Dashboard";
 
-const App = (props) => {
+const App = () => {
   return(
     <div>
-        <h1>Welcome to NKC</h1>
         <Dashboard />
     </div>
   )

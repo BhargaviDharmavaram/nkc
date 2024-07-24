@@ -4,6 +4,13 @@ import AddDailyEarnings from "./AddDailyEarnings";
 import axios from "axios";
 import Swal from 'sweetalert2';
 import EarningsList from "./EarningsList";
+import {
+    Container,
+    Typography,
+    Paper,
+    Button,
+    Box
+} from '@mui/material';
 
 const EarningsContainer = () => {
     const [totalAmount, setTotalAmount] = useState(0);
@@ -41,7 +48,15 @@ const EarningsContainer = () => {
                 title: response.data.message,
                 text: `Earnings for the date ${formattedDate} - ${amount} added successfully!`, // Display the category's name from the server
             });
+            console.log(response.data)
+            //setEarnings(response.data.dailyEarnings)
             setTotalAmount(response.data.totalAmount);
+             // Check if dailyEarnings is an array or an object
+             if (Array.isArray(response.data.dailyEarnings)) {
+                setEarnings(response.data.dailyEarnings);
+            } else {
+                setEarnings(prevEarnings => [...prevEarnings, response.data.dailyEarnings]);
+            }
         } catch (error) {
             console.error('Error adding daily earnings:', error);
         }
@@ -52,7 +67,13 @@ const EarningsContainer = () => {
             try {
                 const response = await axios.get('http://localhost:3777/api/get-earnings');
                 console.log(response.data, 'daily-earnings-form-res')
-                setEarnings(response.data.earnings);
+                //setEarnings(response.data.earnings);
+                // Ensure earnings is set to an array
+                if (Array.isArray(response.data.earnings)) {
+                    setEarnings(response.data.earnings);
+                } else {
+                    setEarnings([response.data.earnings]);
+                }
             } catch (error) {
                 console.error('Error fetching earnings:', error);
             }
@@ -62,14 +83,25 @@ const EarningsContainer = () => {
     }, []);
 
     return (
-        <div>
-            <h1>Total Amount: {totalAmount}</h1>
-            <AddDailyEarnings addDailyEarnings={addDailyEarnings} />
-            <EarningsList earnings={earnings}/>
-             
-            <br />
-            <Link to="/">Back to Dashboard</Link>
-        </div>
+        <Container maxWidth="md">
+            <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+                <Typography variant="h4" gutterBottom>
+                    Earnings Form
+                </Typography>
+                <AddDailyEarnings addDailyEarnings={addDailyEarnings} />
+                <EarningsList earnings={earnings} totalAmount={totalAmount}/>
+                <Box marginTop={2}>
+                    <Button
+                        component={Link}
+                        to="/"
+                        variant="contained"
+                        color="primary"
+                    >
+                        Back to Dashboard
+                    </Button>
+                </Box>
+            </Paper>
+        </Container>
     );
 }
 

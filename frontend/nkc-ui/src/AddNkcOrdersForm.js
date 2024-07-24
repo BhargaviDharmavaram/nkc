@@ -3,6 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Box, Button, TextField, Typography } from '@mui/material';
 
 const AddNKCOrdersForm = ({ addOrder }) => {
     const [date, setDate] = useState(new Date());
@@ -44,21 +45,30 @@ const AddNKCOrdersForm = ({ addOrder }) => {
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '20vh' }}>
-            <form onSubmit={handleFormSubmit} style={{ textAlign: 'center', width: '100%' }}>
-                <label>Date</label> <br />
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="20vh">
+            <form onSubmit={handleFormSubmit} style={{ textAlign: 'center', width: '80%' }}>
+                <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '20px' }} mb={2}>Date</Typography>
                 <DatePicker
                     selected={date}
                     onChange={handleDateChange}
                     dateFormat="yyyy-MM-dd"
-                /> <br />
-
-                <label>Amount</label> <br />
-                <input type="number" value={amount} onChange={handleAmountChange} required /> <br />
-
-                <input type='submit' value="Add Product Order" />
+                    customInput={<TextField fullWidth />}
+                />
+                <Typography variant="h6" mt={2} mb={2} style={{ fontWeight: 'bold', fontSize: '20px' }}>Amount</Typography>
+                <TextField
+                    fullWidth
+                    type="number"
+                    value={amount}
+                    onChange={handleAmountChange}
+                    variant="outlined"
+                />
+                <Box mt={3}>
+                    <Button variant="contained" color="primary" type="submit">
+                        Add Product Order
+                    </Button>
+                </Box>
             </form>
-        </div>
+        </Box>
     );
 };
 

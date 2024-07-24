@@ -1,6 +1,7 @@
 import React,{useState} from "react";
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import { Box, Button, TextField, Typography } from '@mui/material';
 
 const AddUser = (props) =>{
     const {addUser} = props
@@ -35,13 +36,23 @@ const AddUser = (props) =>{
         }
     }
     return(
-        <div>
-            <form onSubmit={handleFormSubmit} >
-                <label>Add User Name</label> <br />
-                <input type="text" value={name} onChange={handleName} /> <br />
-                <input type='submit' value="Add User"  />
-            </form>
-        </div>
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="10vh">
+            <Box component="form" onSubmit={handleFormSubmit} sx={{ textAlign: 'center', width: '80%' }}>
+                <Typography variant="h6" mb={2} style={{ fontWeight: 'bold', fontSize: '20px' }}>Add UserName</Typography>
+                <TextField
+                    fullWidth
+                    label="User Name"
+                    variant="outlined"
+                    value={name}
+                    onChange={handleName}
+                />
+                <Box mt={3}>
+                    <Button variant="contained" color="primary" type="submit">
+                        Add User
+                    </Button>
+                </Box>
+            </Box>
+        </Box>
     )
 }
 export default AddUser

@@ -1,31 +1,39 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios'
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
 import AddCategory from "./AddCategory";
 import CategoriesList from "./CategoriesList";
-import Swal from 'sweetalert2'
-import {Link} from 'react-router-dom'
+import {
+    Container,
+    Typography,
+    Paper,
+    Button,
+    Box
+} from '@mui/material';
 
-
-const CategoriesContainer = (props) => {
+const CategoriesContainer = () => {
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:3777/api/get-categories')
-            .then((res) => {
-                console.log("categories", res.data); // array of objects
-                setCategories(res.data);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('http://localhost:3777/api/get-categories');
+                setCategories(response.data);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
+
+        fetchCategories();
     }, []);
 
-    const addCategory = (newCategory) => {
+    const addCategory = async (newCategory) => {
+        console.log(newCategory)
         setCategories([...categories, newCategory]);
     };
 
     const removeCategory = async (categoryId, categoryName) => {
-        console.log('categoryId', categoryId, categoryName);
         Swal.fire({
             title: 'Are you sure?',
             icon: 'warning',
@@ -47,7 +55,7 @@ const CategoriesContainer = (props) => {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'An error occurred while removing the category.'
+                        text: error.response.data.error 
                     });
                     console.error('Error removing category:', error);
                 }
@@ -64,7 +72,6 @@ const CategoriesContainer = (props) => {
                     icon: 'success',
                     title: response.data.message
                 });
-                // Update the category in the state
                 const updatedCategories = categories.map(category => {
                     if (category._id === categoryId) {
                         return { ...category, name: newName };
@@ -79,12 +86,25 @@ const CategoriesContainer = (props) => {
     };
 
     return (
-        <div>
-            <h2> Total Categories - {categories.length}</h2>
-            <AddCategory addCategory={addCategory} />
-            <CategoriesList categories={categories} removeCategory={removeCategory} editCategory={editCategory} />
-            <Link to="/">Back to Dashboard</Link>
-        </div>
+        <Container maxWidth="md">
+            <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+                <Typography variant="h4" gutterBottom>
+                    Categories Form
+                </Typography>
+                <AddCategory addCategory={addCategory} />
+                <CategoriesList categories={categories} removeCategory={removeCategory} editCategory={editCategory} />
+                <Box marginTop={2}>
+                    <Button
+                        component={Link}
+                        to="/"
+                        variant="contained"
+                        color="primary"
+                    >
+                        Back to Dashboard
+                    </Button>
+                </Box>
+            </Paper>
+        </Container>
     );
 };
 

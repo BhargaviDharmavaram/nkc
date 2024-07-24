@@ -4,6 +4,13 @@ import AddUser from "./AddUser";
 import UsersList from "./UsersList";
 import Swal from 'sweetalert2';
 import {Link} from 'react-router-dom'
+import {
+    Container,
+    Typography,
+    Paper,
+    Button,
+    Box
+} from '@mui/material';
 
 const UsersContainer = (props) =>{
     const [users,setUsers] = useState([])
@@ -22,12 +29,6 @@ const UsersContainer = (props) =>{
     const addUser = (newUser) => {
         setUsers([...users,newUser])
     }
-    // const removeItem = (id) =>{
-    //     const data = users.filter((ele)=>{
-    //         return ele._id !== id
-    //     })
-    //     setUsers(data)
-    // }
     
     const removeUser = async (userId, userName) => {
         console.log('userId', userId, userName);
@@ -52,7 +53,7 @@ const UsersContainer = (props) =>{
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'An error occurred while removing the user.'
+                        text: `${error.response.data.error}`
                     });
                     console.error('Error removing user:', error);
                 }
@@ -83,12 +84,25 @@ const UsersContainer = (props) =>{
         }
     }
     return(
-        <div>
-            <h2> Total Users - {users.length}</h2>
-            <AddUser addUser={addUser} />
-            <UsersList users={users} removeUser={removeUser} editUser={editUser}/>
-            <Link to="/">Back to Dashboard</Link>
-        </div>
+        <Container maxWidth="md">
+            <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+                <Typography variant="h4" gutterBottom>
+                    User Form
+                </Typography>
+                <AddUser addUser={addUser} />
+                <UsersList users={users} removeUser={removeUser} editUser={editUser}/>
+                <Box marginTop={2}>
+                    <Button
+                        component={Link}
+                        to="/"
+                        variant="contained"
+                        color="primary"
+                    >
+                        Back to Dashboard
+                    </Button>
+                </Box>
+            </Paper>
+        </Container>
     )
 }
 export default UsersContainer

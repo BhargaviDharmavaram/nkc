@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { Box, Button, TextField, Typography } from '@mui/material';
 
-const AddCategory = (props) => {
-    const { addCategory } = props;
+const AddCategory = ({ addCategory }) => {
     const [name, setName] = useState('');
 
-    const handleName = (e) => {
+    const handleNameChange = (e) => {
         setName(e.target.value);
     };
 
@@ -15,32 +15,45 @@ const AddCategory = (props) => {
         const formData = {
             name: name
         };
-        console.log('form data', formData);
+
         try {
             const response = await axios.post('http://localhost:3777/api/add-category', formData);
-            console.log('Response from server:', response.data);
-            // Show success message
             Swal.fire({
                 icon: 'success',
                 title: response.data.message,
-                text: `Category named as "${response.data.category.name}" added successfully!`, // Display the category's name from the server
+                text: `Category named as "${response.data.category.name}" added successfully!`,
             });
             // Update the categories list
             addCategory(response.data.category);
             setName('');
         } catch (error) {
-            console.error('Error sending data to server:', error);
+            console.error('Error adding category:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while adding the category.'
+            });
         }
     };
 
     return (
-        <div>
-            <form onSubmit={handleFormSubmit} >
-                <label>Add Category Name</label> <br />
-                <input type="text" value={name} onChange={handleName} /> <br />
-                <input type='submit' value="Add Category" />
-            </form>
-        </div>
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="10vh">
+            <Box component="form" onSubmit={handleFormSubmit} sx={{ textAlign: 'center', width: '80%' }}>
+                <Typography variant="h6" mb={2} style={{ fontWeight: 'bold', fontSize: '20px' }}>Add Category</Typography>
+                <TextField
+                    fullWidth
+                    label="Category Name"
+                    variant="outlined"
+                    value={name}
+                    onChange={handleNameChange}
+                />
+                <Box mt={3}>
+                    <Button variant="contained" color="primary" type="submit">
+                        Add Category
+                    </Button>
+                </Box>
+            </Box>
+        </Box>
     );
 };
 

@@ -4,42 +4,63 @@ import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 import AddNKCOrdersForm from "./AddNkcOrdersForm";
 import NKCOrdersList from "./NKCOrdersList";
+import {
+    Container,
+    Typography,
+    Paper,
+    Button,
+    Box
+} from '@mui/material';
 
 const NKCOrdersContainer = () => {
     const [orders, setOrders] = useState([]);
 
     useEffect(()=> {
-        axios.get('http://localhost:3777/api/get-productsOrders')
-            .then((res) => {
-                console.log("orders", res.data); // array of objects
-                setOrders(res.data);
-            })
-            .catch((error) => {
+        const fetchOrders = async () => {
+            try {
+                const response = await axios.get('http://localhost:3777/api/get-productsOrders');
+                console.log("orders", response.data); // array of objects
+                setOrders(response.data);
+            } catch (error) {
                 console.error('Error fetching orders:', error);
-            });
+            }
+        };
+
+        fetchOrders();
     }, []);
     
-    const addOrder = (newOrder) => {
-        setOrders([...orders, newOrder]);
+    const addOrder = async (newOrder) => {
+        setOrders([...orders, newOrder])
     };
 
     const removeOrder = async (orderId) => {
-        try {
-            const response = await axios.delete(`http://localhost:3777/api/delete-productsOrders/${orderId}`);
-            setOrders(orders.filter(order => order._id !== orderId));
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: response.data.message
-            });
-        } catch (error) {
-            console.error('Error removing order:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while removing the product order'
-            });
-        }
+        Swal.fire({
+            title: 'Are you sure?',
+            icon: 'warning',
+            text: 'Are you sure to remove this order?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, remove it'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await axios.delete(`http://localhost:3777/api/delete-productsOrders/${orderId}`);
+                    Swal.fire({
+                        icon: 'success',
+                        title: response.data.message
+                    });
+                    setOrders(orders.filter(order => order._id !== orderId));
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while removing the order.'
+                    });
+                    console.error('Error removing order:', error);
+                }
+            }
+        });
     };
 
     const editOrder = async (orderId, currentDate, currentAmount) => {
@@ -65,19 +86,32 @@ const NKCOrdersContainer = () => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'An error occurred while updating the product order',
+                    text: 'An error occurred while updating the order',
                 });
             }
         }
     };
 
     return (
-        <div>
-            <h2>Total NKC Orders - {orders.length}</h2>
-            <AddNKCOrdersForm addOrder={addOrder} />
-            <NKCOrdersList orders={orders} removeOrder={removeOrder} editOrder={editOrder}/>
-            <Link to="/">Back to Dashboard</Link>
-        </div>
+        <Container maxWidth="md">
+            <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+                <Typography variant="h4" gutterBottom>
+                    NKC Orders Form
+                </Typography>
+                <AddNKCOrdersForm addOrder={addOrder} />
+                <NKCOrdersList orders={orders} removeOrder={removeOrder} editOrder={editOrder}/>
+                <Box marginTop={2}>
+                    <Button
+                        component={Link}
+                        to="/"
+                        variant="contained"
+                        color="primary"
+                    >
+                        Back to Dashboard
+                    </Button>
+                </Box>
+            </Paper>
+        </Container>
     );
 };
 

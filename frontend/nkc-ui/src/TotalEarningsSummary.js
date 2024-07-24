@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Box, Typography, TextField } from '@mui/material';
 
 const EarningsSummary = () => {
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [selectedYear, setSelectedYear] = useState(null);
-    const [totalAmount, setTotalAmount] = useState(null); // Change initial state to null
-    const [selectedLabel, setSelectedLabel] = useState(''); // State to store selected label dynamically
+    const [totalAmount, setTotalAmount] = useState(null);
+    const [selectedLabel, setSelectedLabel] = useState('');
 
     const fetchTotalEarnings = async (month, year) => {
         try {
@@ -16,7 +17,6 @@ const EarningsSummary = () => {
             });
             setTotalAmount(response.data.totalAmount);
 
-            // Set the selected label dynamically based on what was selected
             if (month && year) {
                 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                     'July', 'August', 'September', 'October', 'November', 'December'];
@@ -47,36 +47,40 @@ const EarningsSummary = () => {
     };
 
     return (
-        <div>
-            <h1>Earnings Summary</h1>
-            <div>
-                <label>Select Month: </label>
-                <DatePicker
-                    selected={selectedMonth}
-                    onChange={handleMonthChange}
-                    dateFormat="MM/yyyy"
-                    showMonthYearPicker
-                />
-            </div>
-            <div>
-                <label>Select Year: </label>
-                <DatePicker
-                    selected={selectedYear}
-                    onChange={handleYearChange}
-                    dateFormat="yyyy"
-                    showYearPicker
-                />
-            </div>
+        <Box display="flex" flexDirection="column" alignItems="center" p={3}>
+            <Typography variant="h4" gutterBottom>
+                Earnings Summary
+            </Typography>
+            <Box display="flex" flexDirection="column" alignItems="center" width="50%">
+                <Box mb={2} width="100%">
+                    <Typography variant="h6" gutterBottom>Select Month:</Typography>
+                    <DatePicker
+                        selected={selectedMonth}
+                        onChange={handleMonthChange}
+                        dateFormat="MM/yyyy"
+                        showMonthYearPicker
+                        customInput={<TextField fullWidth variant="outlined" />}
+                    />
+                </Box>
+                <Box mb={2} width="100%">
+                    <Typography variant="h6" gutterBottom>Select Year:</Typography>
+                    <DatePicker
+                        selected={selectedYear}
+                        onChange={handleYearChange}
+                        dateFormat="yyyy"
+                        showYearPicker
+                        customInput={<TextField fullWidth variant="outlined" />}
+                    />
+                </Box>
+            </Box>
             {totalAmount === null ? (
-                <div>
-                    <p>Select a month or year to see total earnings.</p>
-                </div>
+                <Typography variant="body1">Select a month or year to see total earnings.</Typography>
             ) : (
-                <div>
-                    <h2>{selectedLabel}: {totalAmount}</h2>
-                </div>
+                <Box mt={3} width="100%" textAlign="center">
+                    <Typography variant="h6">{selectedLabel}: {totalAmount}</Typography>
+                </Box>
             )}
-        </div>
+        </Box>
     );
 };
 
