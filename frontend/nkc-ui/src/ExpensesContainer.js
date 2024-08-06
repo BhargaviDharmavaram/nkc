@@ -5,13 +5,15 @@ import { Link } from 'react-router-dom';
 import AddExpense from "./AddExpense";
 import ExpensesList from "./ExpensesList";
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
     Container,
     Typography,
     Paper,
     Button,
     Box,
-    TextField
+    TextField, 
+    Grid
 } from '@mui/material';
 
 const ExpensesContainer = () => {
@@ -20,15 +22,18 @@ const ExpensesContainer = () => {
     const [categories, setCategories] = useState([]);
     const [editMode, setEditMode] = useState(false);
     const [currentExpense, setCurrentExpense] = useState(null);
-    const [selectedMonth, setSelectedMonth] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [searchMonth, setSearchMonth] = useState(null)
     const [filteredExpenses, setFilteredExpenses] = useState([]);
+    const [categorySearch, setCategorySearch] = useState('');
+    const [userSearch, setUserSearch] = useState('');
 
     useEffect(() => {
         const fetchExpenses = async () => {
             try {
                 const expensesResponse = await axios.get('http://localhost:3777/api/get-expenses');
                 setExpenses(expensesResponse.data.expenses);
-                console.log(expensesResponse.data,'expenses')
+                console.log(expensesResponse.data, 'expenses');
                 const usersResponse = await axios.get('http://localhost:3777/api/get-users');
                 setUsers(usersResponse.data);
                 const categoriesResponse = await axios.get('http://localhost:3777/api/get-categories');
@@ -42,17 +47,33 @@ const ExpensesContainer = () => {
     }, []);
 
     useEffect(() => {
-        if (selectedMonth) {
-            const filtered = expenses.filter(expense => {
-                const expenseDate = new Date(expense.dateTime);
-                return expenseDate.getMonth() === selectedMonth.getMonth() &&
-                       expenseDate.getFullYear() === selectedMonth.getFullYear();
+        let filtered = expenses;
+
+        if (searchMonth) {
+            filtered = filtered.filter(expense => {
+                const expenseMonth = new Date(expense.dateTime);
+                return expenseMonth.getMonth() === searchMonth.getMonth() &&
+                    expenseMonth.getFullYear() === searchMonth.getFullYear();
             });
-            setFilteredExpenses(filtered);
-        } else {
-            setFilteredExpenses(expenses);
         }
-    }, [selectedMonth, expenses]);
+
+        if (selectedDate) {
+            filtered = filtered.filter(expense => {
+                const expenseDate = new Date(expense.dateTime);
+                return expenseDate.toDateString() === selectedDate.toDateString();
+            });
+        }
+
+        if (categorySearch) {
+            filtered = filtered.filter(expense => expense.category && expense.category.name.toLowerCase().includes(categorySearch.toLowerCase()));
+        }
+
+        if (userSearch) {
+            filtered = filtered.filter(expense => expense.user && expense.user.name.toLowerCase().includes(userSearch.toLowerCase()));
+        }
+
+        setFilteredExpenses(filtered);
+    }, [selectedDate, categorySearch, userSearch, expenses, searchMonth]);
 
     const addExpense = async (newExpenseData) => {
         console.log(newExpenseData)
@@ -63,7 +84,7 @@ const ExpensesContainer = () => {
                 title: response.data.message,
                 text: `Expense added successfully!`
             });
-            console.log(response.data.expense,'expenses-add')
+            console.log(response.data.expense, 'expenses-add')
             setExpenses([...expenses, response.data.expense]);
         } catch (error) {
             console.error('Error adding expense:', error);
@@ -125,8 +146,21 @@ const ExpensesContainer = () => {
         setCurrentExpense(null);
     };
 
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+        setSearchMonth(null); 
+    };
     const handleMonthChange = (date) => {
-        setSelectedMonth(date);
+        setSearchMonth(date);
+        setSelectedDate(null)
+    };
+
+    const handleCategorySearchChange = (event) => {
+        setCategorySearch(event.target.value);
+    };
+
+    const handleUserSearchChange = (event) => {
+        setUserSearch(event.target.value);
     };
 
     return (
@@ -145,21 +179,58 @@ const ExpensesContainer = () => {
                     onCancelEdit={handleCancelEdit}
                 />
                 <Box marginTop={2}>
-                    <Typography variant="h6">
-                        Select Month:
-                    </Typography>
-                    <DatePicker
-                        selected={selectedMonth}
-                        onChange={handleMonthChange}
-                        dateFormat="MM/yyyy"
-                        showMonthYearPicker
-                        customInput={<TextField variant="outlined" />}
-                    />
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={4}>
+                            <Typography variant="h6">
+                                Select Date:
+                            </Typography>
+                            <DatePicker
+                                selected={selectedDate}
+                                onChange={handleDateChange}
+                                dateFormat="yyyy-MM-dd"
+                                customInput={<TextField variant="outlined" fullWidth />}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                        <Typography variant="subtitle1">Select Month:</Typography>
+                        <DatePicker
+                            selected={searchMonth}
+                            onChange={handleMonthChange}
+                            dateFormat="MM/yyyy"
+                            showMonthYearPicker
+                            customInput={<TextField variant="outlined" fullWidth />}
+                        />
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <Typography variant="h6">
+                                Search Category:
+                            </Typography>
+                            <TextField
+                                label="Search by Category"
+                                variant="outlined"
+                                value={categorySearch}
+                                onChange={handleCategorySearchChange}
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <Typography variant="h6">
+                                Search User:
+                            </Typography>
+                            <TextField
+                                label="Search by User"
+                                variant="outlined"
+                                value={userSearch}
+                                onChange={handleUserSearchChange}
+                                fullWidth
+                            />
+                        </Grid>
+                    </Grid>
                 </Box>
                 <Box marginTop={2}>
                     <ExpensesList
-                        expenses={selectedMonth ? filteredExpenses : expenses}
-                        selectedMonth={selectedMonth}
+                        expenses={filteredExpenses}
+                        selectedMonth={selectedDate}
                         removeExpense={removeExpense}
                         editExpense={editExpense}
                     />

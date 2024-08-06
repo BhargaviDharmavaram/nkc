@@ -12,52 +12,52 @@ import EarningsCurrentMonthTotal from './EarningsMonthlyTotalAmount'
 
 const useStyles = makeStyles({
     card: {
-        position: 'relative',
-        overflow: 'visible',
-        cursor: 'pointer',
-        marginBottom: '1rem',
-        '&:hover': {
-            boxShadow: '0 20px 30px rgba(0, 0, 0, 0.12)',
-        },
+      position: 'relative',
+      overflow: 'visible',
+      cursor: 'pointer',
+      marginBottom: '1rem',
+      '&:hover': {
+        boxShadow: '0 20px 30px rgba(0, 0, 0, 0.12)',
+      },
     },
     cardHeader: {
-        color: '#d81b60',
-        paddingBottom: '0',
+      color: '#d81b60',
+      paddingBottom: '0',
     },
     iconWrapper: {
-        position: 'absolute',
-        top: '-0.5rem',
-        left: '0.6rem',
-        width: '5rem',
-        height: '5rem',
-        borderRadius: '50%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#d81b60',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+      position: 'absolute',
+      top: '-0.2rem', // Adjusted to make the icon more visible
+      left: '1rem',
+      width: '4rem',
+      height: '4rem',
+      borderRadius: '50%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#d81b60',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
     },
     icon: {
-        fontSize: '1.75rem',
-        color: '#d81b60',
+      fontSize: '2rem', // Increased font size for better visibility
+      color: '#fff', // Set color to white for better contrast
     },
     cardFooter: {
-        padding: '0.75rem 1.5rem',
+      padding: '0.75rem 1.5rem',
     },
     textPrimary: {
-        fontSize: '4rem',
-        color: '#d81b60',
+      fontSize: '4rem',
+      color: '#d81b60',
     },
     textSecondary: {
-        color: '#ff9800',
+      color: '#ff9800',
     },
     textSuccess: {
-        color: '#4caf50',
+      color: '#4caf50',
     },
     textInfo: {
-        color: '#00bcd4',
+      color: '#00bcd4',
     },
-});
+  });
 
 const Home = () => {
     const classes = useStyles();
@@ -386,14 +386,10 @@ const Home = () => {
                                         </Avatar>
                                     }
                                     title={
-                                        <Typography sx={{ fontSize: 25}} >
+                                        <Typography sx={{ fontSize: 25, ml: 8}} >
                                             Total Expenses
                                         </Typography>
                                     }
-                                    subheader={
-                                        <Typography sx={{ fontSize: 20}} >
-                                            
-                                        </Typography>}
                                 />
                                 <CardContent>
                                     <Typography variant="h4">Rs.{totalExpensesAmount}</Typography>
@@ -410,14 +406,10 @@ const Home = () => {
                                         </Avatar>
                                     }
                                     title={
-                                        <Typography sx={{ fontSize: 25}} >
+                                        <Typography sx={{ fontSize: 25, ml: 8}} >
                                             Total Earnings
                                         </Typography>
                                     }
-                                    subheader={
-                                        <Typography sx={{ fontSize: 20}} >
-                                            
-                                        </Typography>}
                                 />
                                 <CardContent>
                                     <Typography variant="h4">Rs.{totalEarningsAmount}</Typography>
@@ -434,14 +426,10 @@ const Home = () => {
                                         </Avatar>
                                     }
                                     title={
-                                        <Typography sx={{ fontSize: 25}} >
+                                        <Typography sx={{ fontSize: 25, ml: 8}} >
                                             NKC Orders
                                         </Typography>
                                     }
-                                    subheader={
-                                        <Typography sx={{ fontSize: 20}} >
-                                            
-                                        </Typography>}
                                 />
                                 <CardContent>
                                     <Typography variant="h4">Rs.{totalNKCOrdersAmount}</Typography>

@@ -47,6 +47,7 @@ const NKCOrdersList = ({ orders, removeOrder, editOrder }) => {
                                     <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>S.No</TableCell>
                                     <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>Date</TableCell>
                                     <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>Amount</TableCell>
+                                    <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>Type of Order</TableCell>
                                     <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>Actions</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -56,11 +57,12 @@ const NKCOrdersList = ({ orders, removeOrder, editOrder }) => {
                                         <TableCell style={{ fontSize: '20px' }}>{page * rowsPerPage + index + 1}</TableCell>
                                         <TableCell style={{ fontSize: '20px' }}>{ order.date && new Date(order.date).toISOString().split('T')[0]}</TableCell>
                                         <TableCell style={{ fontSize: '20px' }}>{order.amount}</TableCell>
+                                        <TableCell style={{ fontSize: '20px' }}>{order.type}</TableCell>
                                         <TableCell style={{ fontSize: '20px' }}>
                                             <IconButton
                                                 color="primary"
                                                 size="small"
-                                                onClick={() => editOrder(order._id, new Date(order.date).toISOString().split('T')[0], order.amount)}
+                                                onClick={() => editOrder(order._id, new Date(order.date).toISOString().split('T')[0], order.amount, order.type)}
                                                 style={{ marginRight: '5px' }}
                                             >
                                                 <EditIcon />

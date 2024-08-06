@@ -8,6 +8,7 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 const AddNKCOrdersForm = ({ addOrder }) => {
     const [date, setDate] = useState();
     const [amount, setAmount] = useState('');
+    const [type, setType] = useState('');
 
     const handleDateChange = (selectedDate) => {
         setDate(selectedDate);
@@ -17,29 +18,41 @@ const AddNKCOrdersForm = ({ addOrder }) => {
         setAmount(e.target.value);
     };
 
+    const handleTypeChange = (e) => {
+        setType(e.target.value);
+    };
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const formData = {
-            date: date.toISOString().split('T')[0], // Get date part only (YYYY-MM-DD)
-            amount: amount
+            date: new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())).toISOString().split('T')[0], // Get date part only (YYYY-MM-DD)
+            amount: amount,
+            type: type
         };
+        console.log('formadta-nkc-orders-add', formData)
         try {
             const response = await axios.post('http://localhost:3777/api/add-productsOrders', formData);
             console.log('Response from server:', response.data);
-            Swal.fire({
-                icon: 'success',
-                title: response.data.message,
-                text: 'Product order added successfully!'
-            });
+            // Swal.fire({
+            //     icon: 'success',
+            //     title: response.data.message,
+            //     text: 'Product order added successfully!'
+            // });
+                Swal.fire({
+                    icon: 'success',
+                    title: response.data.message,
+                    text: `NKC Order for the date ${formData.date} - ${amount} added successfully!`
+                });
             addOrder(response.data.productsOrder); // Update the orders list
             setDate(new Date()); // Reset date to current date
             setAmount('');
+            setType('')
         } catch (error) {
             console.error('Error adding product order:', error);
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'An error occurred while adding the product order'
+                text:  error.response?.data?.message
             });
         }
     };
@@ -60,6 +73,14 @@ const AddNKCOrdersForm = ({ addOrder }) => {
                     type="number"
                     value={amount}
                     onChange={handleAmountChange}
+                    variant="outlined"
+                />
+                <Typography variant="h6" mt={2} mb={2} style={{ fontWeight: 'bold', fontSize: '20px' }}>Type</Typography>
+                <TextField
+                    fullWidth
+                    type="text"
+                    value={type}
+                    onChange={handleTypeChange}
                     variant="outlined"
                 />
                 <Box mt={3}>

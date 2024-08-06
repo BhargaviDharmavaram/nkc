@@ -4,14 +4,17 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { Box, Button, TextField, Typography } from '@mui/material';
 
 const AddDailyEarnings = ({ addDailyEarnings }) => {
-    const [date, setDate] = useState(new Date()); // Initialize date state with today's date
-    const [amount, setAmount] = useState('');
+    const [date, setDate] = useState(new Date());
+    const [counterAmount, setCounterAmount] = useState('');
+    const [teaCoffeeAmount, setTeaCoffeeAmount] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const amount = parseFloat(counterAmount) + parseFloat(teaCoffeeAmount);
         addDailyEarnings(date, amount);
-        setAmount('');
-        setDate('')
+        setCounterAmount('');
+        setTeaCoffeeAmount('');
+        setDate(new Date()); // Reset date to today's date
     };
 
     return (
@@ -24,12 +27,20 @@ const AddDailyEarnings = ({ addDailyEarnings }) => {
                     dateFormat="yyyy-MM-dd"
                     customInput={<TextField fullWidth />}
                 />
-                <Typography variant="h6" mt={2} mb={2} style={{ fontWeight: 'bold', fontSize: '20px' }}>Amount</Typography>
+                <Typography variant="h6" mt={2} mb={2} style={{ fontWeight: 'bold', fontSize: '20px' }}>Counter Amount</Typography>
                 <TextField
                     fullWidth
                     type="number"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                    value={counterAmount}
+                    onChange={(e) => setCounterAmount(e.target.value)}
+                    variant="outlined"
+                />
+                <Typography variant="h6" mt={2} mb={2} style={{ fontWeight: 'bold', fontSize: '20px' }}>Tea/Coffee Amount</Typography>
+                <TextField
+                    fullWidth
+                    type="number"
+                    value={teaCoffeeAmount}
+                    onChange={(e) => setTeaCoffeeAmount(e.target.value)}
                     variant="outlined"
                 />
                 <Box mt={3}>

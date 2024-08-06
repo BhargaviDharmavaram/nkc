@@ -11,10 +11,10 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
-    width: 240,
+    width: 280,
     flexShrink: 0,
     '& .MuiDrawer-paper': {
-      width: 240,
+      width: 290,
       backgroundColor: '#343a40',
       color: '#fff',
     },
@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontWeight: 'bold',
     color: '#fff',
+    fontSize: '1.5rem', // Increase the font size
   },
   listItem: {
     color: '#fff',
@@ -38,11 +39,11 @@ const useStyles = makeStyles((theme) => ({
   },
   listItemIcon: {
     color: '#fff',
-    fontSize: 'large',
+    fontSize: '1.5rem',
   },
   listItemText: {
     color: '#fff',
-    fontSize: '2.6rem', // Increased font size
+    fontSize: '1.2rem', // Increased font size
   },
   upgradeButton: {
     backgroundColor: '#e91e63',
@@ -81,18 +82,20 @@ const Sidebar = ({ onToggleTheme }) => {
         <List>
           <ListItem 
             component={Link} 
-            to="/" 
-            className={`${classes.listItem} ${location.pathname === '/' ? classes.selectedListItem : ''}`}
+            to="/home" 
+            className={`${classes.listItem} ${location.pathname === '/home' ? classes.selectedListItem : ''}`}
           >
-            <ListItemIcon className={classes.listItemIcon}><HomeIcon /></ListItemIcon>
-            <ListItemText primary="Home" classes={{ primary: classes.listItemText }} />
+            <ListItemIcon className={classes.listItemIcon}><HomeIcon style={{ fontSize: '2rem', color: '#ff669a' }} /></ListItemIcon>
+            <ListItemText primary="Home"
+            //primaryTypographyProps={{ style: { fontSize: '1.5rem', fontWeight: 'bold' } }} 
+             classes={{ primary: classes.listItemText }} />
           </ListItem>
           <ListItem 
             component={Link} 
             to="/users" 
             className={`${classes.listItem} ${location.pathname === '/users' ? classes.selectedListItem : ''}`}
           >
-            <ListItemIcon className={classes.listItemIcon}><PeopleIcon /></ListItemIcon>
+            <ListItemIcon className={classes.listItemIcon}><PeopleIcon style={{ fontSize: '2rem', color: '#ff669a' }} /></ListItemIcon>
             <ListItemText primary="Users" classes={{ primary: classes.listItemText }} />
           </ListItem>
           <ListItem 
@@ -100,7 +103,7 @@ const Sidebar = ({ onToggleTheme }) => {
             to="/categories" 
             className={`${classes.listItem} ${location.pathname === '/categories' ? classes.selectedListItem : ''}`}
           >
-            <ListItemIcon className={classes.listItemIcon}><CategoryIcon /></ListItemIcon>
+            <ListItemIcon className={classes.listItemIcon}><CategoryIcon  style={{ fontSize: '2rem', color: '#ff669a' }}/></ListItemIcon>
             <ListItemText primary="Categories" classes={{ primary: classes.listItemText }} />
           </ListItem>
           <ListItem 
@@ -108,7 +111,7 @@ const Sidebar = ({ onToggleTheme }) => {
             to="/expenses" 
             className={`${classes.listItem} ${location.pathname === '/expenses' ? classes.selectedListItem : ''}`}
           >
-            <ListItemIcon className={classes.listItemIcon}><ReceiptIcon /></ListItemIcon>
+            <ListItemIcon className={classes.listItemIcon}><ReceiptIcon style={{ fontSize: '2rem', color: '#ff669a' }} /></ListItemIcon>
             <ListItemText primary="Expenses" classes={{ primary: classes.listItemText }} />
           </ListItem>
           <ListItem 
@@ -116,7 +119,7 @@ const Sidebar = ({ onToggleTheme }) => {
             to="/nkcOrders" 
             className={`${classes.listItem} ${location.pathname === '/nkcOrders' ? classes.selectedListItem : ''}`}
           >
-            <ListItemIcon className={classes.listItemIcon}><ReceiptIcon /></ListItemIcon>
+            <ListItemIcon className={classes.listItemIcon}><ReceiptIcon style={{ fontSize: '2rem', color: '#ff669a' }}/></ListItemIcon>
             <ListItemText primary="NKC Orders" classes={{ primary: classes.listItemText }} />
           </ListItem>
           <ListItem 
@@ -124,8 +127,8 @@ const Sidebar = ({ onToggleTheme }) => {
             to="/earnings" 
             className={`${classes.listItem} ${location.pathname === '/earnings' ? classes.selectedListItem : ''}`}
           >
-            <ListItemIcon className={classes.listItemIcon}><AttachMoneyIcon /></ListItemIcon>
-            <ListItemText primary="Earnings" classes={{ primary: classes.listItemText }} />
+            <ListItemIcon className={classes.listItemIcon}><AttachMoneyIcon style={{ fontSize: '2rem', color: '#ff669a' }} /></ListItemIcon>
+            <ListItemText primary="Earnings" classes={{ primary: classes.listItemText }}  />
           </ListItem>
         </List>
         <Box className={classes.upgradeButton}>

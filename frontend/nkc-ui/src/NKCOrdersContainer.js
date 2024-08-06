@@ -12,14 +12,16 @@ import {
     Paper,
     Button,
     Box,
+    Grid,
     TextField
 } from '@mui/material';
 
 const NKCOrdersContainer = () => {
     const [orders, setOrders] = useState([]);
     const [searchMonth, setSearchMonth] = useState(null); // Use null for DatePicker
+    const [searchDate, setSearchDate] = useState(null); // State for date
+    const [searchType, setSearchType] = useState(''); // State for type
     const [filteredOrders, setFilteredOrders] = useState([]);
-
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -69,12 +71,13 @@ const NKCOrdersContainer = () => {
         });
     };
 
-    const editOrder = async (orderId, currentDate, currentAmount) => {
+    const editOrder = async (orderId, currentDate, currentAmount,currentOrderType) => {
         const newDate = prompt('Enter the new order date:', currentDate);
         const newAmount = prompt('Enter the new order amount:', currentAmount);
-        if (newDate && newAmount) {
+        const newOrderType = prompt('Enter the new order type placed:', currentOrderType)
+        if (newDate && newAmount && newOrderType) {
             try {
-                const updatedOrder = { date: newDate, amount: newAmount };
+                const updatedOrder = { date: newDate, amount: newAmount, type: newOrderType };
                 const response = await axios.put(`http://localhost:3777/api/update-productsOrders/${orderId}`, updatedOrder);
                 const updatedOrders = orders.map(order => {
                     if (order._id === orderId) {
@@ -98,22 +101,44 @@ const NKCOrdersContainer = () => {
         }
     };
 
-    const handleDateChange = (date) => {
+    const handleMonthChange = (date) => {
         setSearchMonth(date);
+        setSearchDate(null)
+    };
+
+    const handleDateChange = (date) => {
+        setSearchDate(date);
+        setSearchMonth(null)
+    };
+
+    const handleTypeChange = (e) => {
+        setSearchType(e.target.value);
     };
 
     useEffect(() => {
+        let filtered = orders;
+
         if (searchMonth) {
-            const filtered = orders.filter(order => {
+            filtered = filtered.filter(order => {
                 const orderDate = new Date(order.date);
                 return orderDate.getMonth() === searchMonth.getMonth() &&
                        orderDate.getFullYear() === searchMonth.getFullYear();
             });
-            setFilteredOrders(filtered);
-        } else {
-            setFilteredOrders(orders);
         }
-    }, [searchMonth, orders]);
+
+        if (searchDate) {
+            filtered = filtered.filter(order => {
+                const orderDate = new Date(order.date);
+                return orderDate.toDateString() === searchDate.toDateString();
+            });
+        }
+
+        if (searchType) {
+            filtered = filtered.filter(order => order.type.toLowerCase().includes(searchType.toLowerCase()));
+        }
+
+        setFilteredOrders(filtered);
+    }, [searchMonth, searchDate, searchType, orders]);
 
     return (
         <Container maxWidth="md">
@@ -122,18 +147,45 @@ const NKCOrdersContainer = () => {
                     NKC Orders Form
                 </Typography>
                 <AddNKCOrdersForm addOrder={addOrder} />
-                <Typography variant="h6">
-                    Select Month:
+                <Typography variant="h6" gutterBottom>
+                    Search Orders
                 </Typography>
-                <DatePicker
-                    selected={searchMonth}
-                    onChange={handleDateChange}
-                    dateFormat="MM/yyyy"
-                    showMonthYearPicker
-                    customInput={<TextField variant="outlined" />}
-                />
+
+                <Box marginTop={2}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={4}>
+                        <Typography variant="subtitle1">Select Month:</Typography>
+                        <DatePicker
+                            selected={searchMonth}
+                            onChange={handleMonthChange}
+                            dateFormat="MM/yyyy"
+                            showMonthYearPicker
+                            customInput={<TextField variant="outlined" fullWidth />}
+                        />
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                        <Typography variant="subtitle1">Search by Date:</Typography>
+                        <DatePicker
+                            selected={searchDate}
+                            onChange={handleDateChange}
+                            dateFormat="yyyy-MM-dd"
+                            customInput={<TextField variant="outlined" fullWidth />}
+                        />
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                        <Typography variant="subtitle1">Search by Type of Orders Placed:</Typography>
+                        <TextField
+                            label="Search by Type"
+                            value={searchType}
+                            onChange={handleTypeChange}
+                            variant="outlined"
+                            fullWidth
+                        />
+                        </Grid>
+                    </Grid>
+                </Box>
                 <NKCOrdersList 
-                    orders={searchMonth ? filteredOrders : orders} 
+                    orders={filteredOrders} 
                     removeOrder={removeOrder} 
                     editOrder={editOrder} 
                 />

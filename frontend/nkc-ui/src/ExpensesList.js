@@ -45,6 +45,7 @@ const ExpensesList = ({ expenses, removeExpense, editExpense, selectedMonth }) =
                                     <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>S.No</TableCell>
                                     <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>Date</TableCell>
                                     <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>Category</TableCell>
+                                    <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>Sub-Category</TableCell>
                                     <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>User</TableCell>
                                     <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>Amount</TableCell>
                                     <TableCell style={{ fontWeight: 'bold', fontSize: '20px' }}>Actions</TableCell>
@@ -56,6 +57,7 @@ const ExpensesList = ({ expenses, removeExpense, editExpense, selectedMonth }) =
                                         <TableCell style={{ fontSize: '20px' }}>{page * rowsPerPage + i + 1}</TableCell>
                                         <TableCell style={{ fontSize: '20px' }}>{new Date(expense.dateTime).toISOString().split('T')[0]}</TableCell>
                                         <TableCell style={{ fontSize: '20px' }}>{expense.category && expense.category.name}</TableCell>
+                                        <TableCell style={{ fontSize: '20px' }}>{expense.subcategory ? expense.subcategory : "N/A"}</TableCell>
                                         <TableCell style={{ fontSize: '20px' }}>{expense.user && expense.user.name}</TableCell>
                                         <TableCell style={{ fontSize: '20px' }}>{expense.amount}</TableCell>
                                         <TableCell style={{ fontSize: '20px' }}>
@@ -86,7 +88,7 @@ const ExpensesList = ({ expenses, removeExpense, editExpense, selectedMonth }) =
                         </Table>
                     </TableContainer>
                     <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
+                        rowsPerPageOptions={[5, 10, 25,50]}
                         component="div"
                         count={expenses.length}
                         rowsPerPage={rowsPerPage}

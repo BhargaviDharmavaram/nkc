@@ -19,6 +19,7 @@ const EarningsContainer = () => {
     const [totalAmount, setTotalAmount] = useState(0);
     const [earnings, setEarnings] = useState([]);
     const [searchMonth, setSearchMonth] = useState(null); // Use null for DatePicker
+    const [selectedDate, setSelectedDate] = useState(null); // For specific date search
     const [filteredEarnings, setFilteredEarnings] = useState([]);
 
     const fetchTotalEarningsForCurrentMonth = async (month, year) => {
@@ -40,17 +41,29 @@ const EarningsContainer = () => {
     }, []);
 
     const addDailyEarnings = async (date, amount) => {
+        console.log('while adding earnings - date', date, 'amount', amount);
         try {
-            const formattedDate = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD
+            const formattedDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())).toISOString().split('T')[0]; // Format date to YYYY-MM-DD
             const response = await axios.post('http://localhost:3777/api/add-daily-earnings', {
                 date: formattedDate,
                 amount
             });
-            Swal.fire({
-                icon: 'success',
-                title: response.data.message,
-                text: `Earnings for the date ${formattedDate} - ${amount} added successfully!`
-            });
+            console.log('added-earning-res', response.data);
+    
+            if (response.data.updated) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Entry Exists',
+                    text: response.data.message
+                });
+            } else {
+                Swal.fire({
+                    icon: 'success',
+                    title: response.data.message,
+                    text: `Earnings for the date ${formattedDate} - ${amount} added successfully!`
+                });
+            }
+            // Update earnings list
             setTotalAmount(response.data.totalAmount);
             if (Array.isArray(response.data.dailyEarnings)) {
                 setEarnings(response.data.dailyEarnings);
@@ -59,6 +72,11 @@ const EarningsContainer = () => {
             }
         } catch (error) {
             console.error('Error adding daily earnings:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.response?.data?.message
+            });
         }
     };
 
@@ -133,7 +151,13 @@ const EarningsContainer = () => {
     };
 
     const handleDateChange = (date) => {
+        setSelectedDate(date);
+        setSearchMonth(null); // Clear month filter when date is selected
+    };
+
+    const handleMonthChange = (date) => {
         setSearchMonth(date);
+        setSelectedDate(null); // Clear date filter when month is selected
     };
 
     useEffect(() => {
@@ -146,10 +170,16 @@ const EarningsContainer = () => {
                 return earningDate.getMonth() + 1 === month && earningDate.getFullYear() === year;
             });
             setFilteredEarnings(filtered);
+        } else if (selectedDate) {
+            const filtered = earnings.filter(earning => {
+                const earningDate = new Date(earning.date);
+                return earningDate.toDateString() === selectedDate.toDateString();
+            });
+            setFilteredEarnings(filtered);
         } else {
             setFilteredEarnings(earnings);
         }
-    }, [searchMonth, earnings]);
+    }, [searchMonth, selectedDate, earnings]);
 
     return (
         <Container maxWidth="md">
@@ -158,10 +188,17 @@ const EarningsContainer = () => {
                     Earnings Form
                 </Typography>
                 <AddDailyEarnings addDailyEarnings={addDailyEarnings} />
+                <Typography variant="h6">Select Date:</Typography>
+                <DatePicker
+                    selected={selectedDate}
+                    onChange={handleDateChange}
+                    dateFormat="yyyy-MM-dd"
+                    customInput={<TextField variant="outlined" />}
+                />
                 <Typography variant="h6">Select Month:</Typography>
                 <DatePicker
                     selected={searchMonth}
-                    onChange={handleDateChange}
+                    onChange={handleMonthChange}
                     dateFormat="MM/yyyy"
                     showMonthYearPicker
                     customInput={<TextField variant="outlined" />}
