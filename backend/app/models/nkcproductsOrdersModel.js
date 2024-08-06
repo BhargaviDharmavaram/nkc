@@ -6,6 +6,10 @@ const NKCProductsOrderSchema = new Schema({
         type: Date,
         required: true
     },
+    type:{
+        type: String,
+        required: true
+    },
     amount: {
         type: Number,
         required: true

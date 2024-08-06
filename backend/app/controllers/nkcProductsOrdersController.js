@@ -4,8 +4,20 @@ const nkcProductsOrdersController = {};
 
 nkcProductsOrdersController.addProductsOrder = async (req, res) => {
     try {
-        const { date, amount } = req.body;
-        const newProductsOrder = new NKCProductsOrder({ date, amount });
+        const { date: dateString, amount, type } = req.body;
+        const date = new Date(dateString); 
+        // Check if there's already an entry for this date
+        // let existingEntry = await NKCProductsOrder.findOne({ date });
+
+        // if (existingEntry) {
+        //     // Return a message suggesting the admin update the existing entry
+        //     return res.status(400).json({
+        //         message: `An entry for the date ${date.toISOString().split('T')[0]} already exists. Instead of adding a new entry, please update the existing one by clicking on the update icon/button.`,
+        //         nkcOrders: existingEntry,
+        //         updated: false
+        //     });
+        // }
+        const newProductsOrder = new NKCProductsOrder({ date, amount, type });
         const productsOrderRes = await newProductsOrder.save();
         res.json({ message: 'Product orders added successfully', productsOrder: productsOrderRes });
     } catch (error) {
@@ -25,8 +37,8 @@ nkcProductsOrdersController.getProductsOrders = async (req, res) => {
 nkcProductsOrdersController.updateProductsOrders = async (req, res) => {
     try {
         const productOrderId = req.params.id;
-        const { date, amount } = req.body;
-        const updatedProductOrders = await NKCProductsOrder.findByIdAndUpdate(productOrderId, { date, amount }, { new: true });
+        const { date, amount, type } = req.body;
+        const updatedProductOrders = await NKCProductsOrder.findByIdAndUpdate(productOrderId, { date, amount, type }, { new: true });
         if (!updatedProductOrders) {
             return res.status(404).json({ error: 'Product order is not found' });
         }

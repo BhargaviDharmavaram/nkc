@@ -54,11 +54,26 @@ const dailyEarningsController = {};
 //         res.status(500).json({ error: error.message });
 //     }
 // };
+
+// add
 dailyEarningsController.addDailyEarnings = async (req, res) => {
     try {
         const { date: dateString, amount } = req.body;
         const date = new Date(dateString); // Convert date string to Date object
 
+        // Check if there's already an entry for this date
+        let existingEntry = await DailyEarnings.findOne({ date });
+
+        if (existingEntry) {
+            // Return a message suggesting the admin update the existing entry
+            return res.status(400).json({
+                message: `An entry for the date ${date.toISOString().split('T')[0]} already exists. Instead of adding a new entry, please update the existing one by clicking on the update icon/button.`,
+                dailyEarnings: existingEntry,
+                updated: false
+            });
+        }
+
+        // Create a new entry
         const newDailyEarnings = new DailyEarnings({ date, amount });
         const savedEntry = await newDailyEarnings.save();
 
@@ -83,55 +98,16 @@ dailyEarningsController.addDailyEarnings = async (req, res) => {
         res.json({
             message: `Daily earnings for the date - ${date.toISOString().split('T')[0]} added successfully`,
             dailyEarnings: savedEntry,
-            totalAmount: totalEarnings.length > 0 ? totalEarnings[0].totalAmount : 0
+            totalAmount: totalEarnings.length > 0 ? totalEarnings[0].totalAmount : 0,
+            updated: false
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-// dailyEarningsController.updateDailyEarnings = async (req, res) => {
-//     try {
-//         const earningId = req.params.id;
-//         const { date: dateString, amount } = req.body;
-//         const date = new Date(dateString); // Convert date string to Date object
 
-//         let existingEntry = await DailyEarnings.findOne({ date });
 
-//         if (existingEntry) {
-//             existingEntry.amount = amount;
-//             await existingEntry.save();
-
-//             // Calculate total earnings for the month of the updated entry
-//             const startDate = new Date(date.getFullYear(), date.getMonth(), 1);
-//             const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
-
-//             const totalEarnings = await DailyEarnings.aggregate([
-//                 {
-//                     $match: {
-//                         date: { $gte: startDate, $lte: endDate }
-//                     }
-//                 },
-//                 {
-//                     $group: {
-//                         _id: null,
-//                         totalAmount: { $sum: '$amount' }
-//                     }
-//                 }
-//             ]);
-
-//             res.json({
-//                 message: 'Daily earnings updated successfully',
-//                 dailyEarnings: existingEntry,
-//                 totalAmount: totalEarnings.length > 0 ? totalEarnings[0].totalAmount : 0
-//             });
-//         } else {
-//             res.status(404).json({ message: 'Entry not found for the given date' });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ error: error.message });
-//     }
-// };
 dailyEarningsController.updateDailyEarnings = async (req, res) => {
     try {
         const earningId = req.params.id;
@@ -174,6 +150,7 @@ dailyEarningsController.updateDailyEarnings = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 dailyEarningsController.getAllEarnings = async (req, res) =>{
     try {

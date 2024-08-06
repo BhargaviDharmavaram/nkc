@@ -1,11 +1,15 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const configureDB = async () => {
-    try{
-        const db = await mongoose.connect('mongodb://127.0.0.1:27017/nkc')
-        console.log('connecting to db')
-    }catch(error){
-        console.log(error, 'error connecting to DB')
+    try {
+        const db = await mongoose.connect('mongodb+srv://dharamavarambhargavi:Riya2022@cluster0.lrtcqhk.mongodb.net/dharamavarambhargavi', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('Connected to DB');
+    } catch (error) {
+        console.log('Error connecting to DB:', error);
     }
-}
-module.exports = configureDB
+};
+
+module.exports = configureDB;

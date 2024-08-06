@@ -1,4 +1,5 @@
 const express = require('express')
+require('dotenv').config();
 const cors = require('cors')
 const configureDB = require('./config/db')
 const userController = require('./app/controllers/userController')
@@ -7,10 +8,19 @@ const expenseController = require('./app/controllers/expenseController')
 const nkcProductsOrdersController = require('./app/controllers/nkcProductsOrdersController')
 const dailyEarningsController = require('./app/controllers/dailyEarningController')
 const summaryController = require('./app/controllers/summaryController')
+const authenticationControllers = require('./app/controllers/authenticationController')
+const authenticateUser = require('./app/middlewares/authentication')
 const app = express()
 app.use(express.json())
 app.use(cors())
 configureDB()
+
+app.post('/api/register', authenticationControllers.register);
+app.post('/api/login', authenticationControllers.login);
+// Account route (protected)
+app.get('/api/account', authenticateUser, authenticationControllers.account);
+// Edit user route (protected)
+app.put('/api/update/:id', authenticateUser, authenticationControllers.editUser);
 
 app.post('/api/add-user' , userController.addUser)
 app.get('/api/get-users', userController.getUsers)

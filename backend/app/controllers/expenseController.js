@@ -5,14 +5,15 @@ const expenseController = {}
 // Add a new expense
 expenseController.addExpense = async (req, res) => {
     try {
-        const { dateTime, month, year, category, user, amount } = req.body;
+        const { dateTime, month, year, category, user, amount, subcategory } = req.body;
         const expense = new Expense({
             dateTime,
             month,
             year,
             category,
             user,
-            amount
+            amount,
+            subcategory 
         });
         const expenseRes = await expense.save();
         // Calculate total expenses for the month of the added expense
@@ -48,10 +49,10 @@ expenseController.getExpenses = async (req, res) => {
 expenseController.updateExpense = async (req, res) => {
     try {
         const expenseId = req.params.id;
-        const { dateTime, month, year, category, user, amount } = req.body;
+        const { dateTime, month, year, category, user, amount,subcategory  } = req.body;
         const updatedExpense = await Expense.findByIdAndUpdate(
             expenseId,
-            { dateTime, month, year, category, user, amount },
+            { dateTime, month, year, category, user, amount,subcategory  },
             { new: true }
         ).populate('category user');
 
