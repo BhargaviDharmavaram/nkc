@@ -101,9 +101,9 @@ const TextPrimary = styled(Typography)(({ theme }) => ({
     color: '#d81b60',
 }));
 
-const TextSuccess = styled(Typography)(({ theme }) => ({
-    color: '#4caf50',
-}));
+// const TextSuccess = styled(Typography)(({ theme }) => ({
+//     color: '#4caf50',
+// }));
 
 const Home = () => {
     //const classes = useStyles();

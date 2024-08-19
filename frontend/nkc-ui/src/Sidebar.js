@@ -205,9 +205,9 @@ const UpgradeButton = styled(Box)(({ theme }) => ({
   },
 }));
 
-const SelectedListItem = styled(ListItem)(({ theme }) => ({
-  backgroundColor: '#d81b60',
-}));
+// const SelectedListItem = styled(ListItem)(({ theme }) => ({
+//   backgroundColor: '#d81b60',
+// }));
 
 const Sidebar = ({ onToggleTheme }) => {
   const location = useLocation();
