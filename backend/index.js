@@ -14,11 +14,7 @@ const authenticateUser = require('./app/middlewares/authentication')
 const app = express()
 app.use(express.json())
 
-app.use(cors({
-  origin: 'https://nkc-1.onrender.com',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
+app.use(cors());
 configureDB()
 
 app.post('/api/register', authenticationControllers.register);
