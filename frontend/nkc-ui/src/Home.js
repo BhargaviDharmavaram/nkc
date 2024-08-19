@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { Chart } from 'react-google-charts';
 import { Box, Typography, Grid, Card, CardContent, Dialog, DialogTitle, DialogContent, Button, DialogActions, CardHeader, Avatar, TextField, Paper } from '@mui/material';
@@ -125,7 +125,8 @@ const Home = () => {
     const [isExpensesDialogOpen, setIsExpensesDialogOpen] = useState(false);
     const [isEarningsDialogOpen, setIsEarningsDialogOpen] = useState(false);
 
-    const currentDate = new Date();
+    //const currentDate = new Date();
+    const currentDate = useMemo(() => new Date(), []); // Memoize the currentDate
 
     const handleExpensesCardClick = () => {
         setIsExpensesDialogOpen(true);
@@ -142,6 +143,7 @@ const Home = () => {
     const handleEarningsCloseDialog = () => {
         setIsEarningsDialogOpen(false);
     };
+    
 
     useEffect(() => {
         const fetchTotalEarningsForCurrentMonth = async () => {
@@ -157,7 +159,7 @@ const Home = () => {
             }
         };
         fetchTotalEarningsForCurrentMonth();
-    }, []);
+    }, [currentDate]);
 
     useEffect(() => {
         const fetchCurrentMonthExpensesTotal = async () => {
@@ -239,7 +241,7 @@ const Home = () => {
             await fetchDataForMonth(month, year);
         };
         fetchInitialData();
-    }, []);
+    }, [currentDate]);
 
 
     const handleMonthChange = (date) => {
