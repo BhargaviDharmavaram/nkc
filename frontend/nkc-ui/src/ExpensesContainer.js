@@ -192,7 +192,7 @@ const ExpensesContainer = () => {
                             />
                         </Grid>
                         <Grid item xs={12} sm={4}>
-                        <Typography variant="subtitle1">Select Month:</Typography>
+                        <Typography variant="h6">Select Month:</Typography>
                         <DatePicker
                             selected={searchMonth}
                             onChange={handleMonthChange}
