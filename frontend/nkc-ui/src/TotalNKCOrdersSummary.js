@@ -14,7 +14,7 @@ const NKCOrdersSummary = () => {
 
     const fetchTotalOrders = async (date, month, year) => {
         try {
-            const response = await axios.get('http://localhost:3777/api/get-total-orders-amount', {
+            const response = await axios.get('http://localhost:10000/api/get-total-orders-amount', {
                 params: { date, month, year }
             });
             setTotalAmount(response.data.totalAmount);

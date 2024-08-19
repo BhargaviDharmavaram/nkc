@@ -17,7 +17,7 @@ const AddCategory = ({ addCategory }) => {
         };
 
         try {
-            const response = await axios.post('http://localhost:3777/api/add-category', formData);
+            const response = await axios.post('http://localhost:10000/api/add-category', formData);
             Swal.fire({
                 icon: 'success',
                 title: response.data.message,

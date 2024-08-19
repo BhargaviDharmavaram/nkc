@@ -19,7 +19,7 @@ const AddUser = (props) =>{
       }
       console.log('form data', formData)
       try {
-          const response = await axios.post('http://localhost:3777/api/add-user', formData);
+          const response = await axios.post('http://localhost:10000/api/add-user', formData);
           console.log('Response from server:', response.data);
           // Show success message
             Swal.fire({

@@ -45,7 +45,7 @@ const UsersContainer = (props) => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await axios.delete(`http://localhost:3777/api/delete-user/${userId}`);
+                    const response = await axios.delete(`http://localhost:10000/api/delete-user/${userId}`);
                     Swal.fire({
                         icon: 'success',
                         title: response.data.message
@@ -67,7 +67,7 @@ const UsersContainer = (props) => {
         const newName = prompt('Enter the new user name:', currentUserName);
         if (newName) {
             try {
-                const response = await axios.put(`http://localhost:3777/api/update-user/${userId}`, { name: newName });
+                const response = await axios.put(`http://localhost:10000/api/update-user/${userId}`, { name: newName });
                 Swal.fire({
                     icon: 'success',
                     title: response.data.message

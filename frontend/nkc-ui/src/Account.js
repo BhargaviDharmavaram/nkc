@@ -60,7 +60,7 @@ const Account = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3777/api/account', {
+        const response = await axios.get('http://localhost:10000/api/account', {
           headers: {
             'x-auth': token
           }
@@ -80,7 +80,7 @@ const Account = () => {
   const handleCancelEdit = () => setEditing(false);
   const handleUpdate = async () => {
     try {
-      const response = await axios.get('http://localhost:3777/api/account', {
+      const response = await axios.get('http://localhost:10000/api/account', {
         headers: {
           'x-auth': localStorage.getItem('token')
         }

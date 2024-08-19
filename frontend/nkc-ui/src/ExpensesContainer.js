@@ -31,12 +31,12 @@ const ExpensesContainer = () => {
     useEffect(() => {
         const fetchExpenses = async () => {
             try {
-                const expensesResponse = await axios.get('http://localhost:3777/api/get-expenses');
+                const expensesResponse = await axios.get('http://localhost:10000/api/get-expenses');
                 setExpenses(expensesResponse.data.expenses);
                 console.log(expensesResponse.data, 'expenses');
-                const usersResponse = await axios.get('http://localhost:3777/api/get-users');
+                const usersResponse = await axios.get('http://localhost:10000/api/get-users');
                 setUsers(usersResponse.data);
-                const categoriesResponse = await axios.get('http://localhost:3777/api/get-categories');
+                const categoriesResponse = await axios.get('http://localhost:10000/api/get-categories');
                 setCategories(categoriesResponse.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -78,7 +78,7 @@ const ExpensesContainer = () => {
     const addExpense = async (newExpenseData) => {
         console.log(newExpenseData)
         try {
-            const response = await axios.post('http://localhost:3777/api/add-expenses', newExpenseData);
+            const response = await axios.post('http://localhost:10000/api/add-expenses', newExpenseData);
             Swal.fire({
                 icon: 'success',
                 title: response.data.message,
@@ -103,7 +103,7 @@ const ExpensesContainer = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await axios.delete(`http://localhost:3777/api/delete-expenses/${expenseId}`);
+                    const response = await axios.delete(`http://localhost:10000/api/delete-expenses/${expenseId}`);
                     Swal.fire({
                         icon: 'success',
                         title: response.data.message
@@ -128,7 +128,7 @@ const ExpensesContainer = () => {
 
     const handleEditSubmit = async (updatedExpense) => {
         try {
-            const response = await axios.put(`http://localhost:3777/api/update-expenses/${updatedExpense._id}`, updatedExpense);
+            const response = await axios.put(`http://localhost:10000/api/update-expenses/${updatedExpense._id}`, updatedExpense);
             Swal.fire({
                 icon: 'success',
                 title: response.data.message

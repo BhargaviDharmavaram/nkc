@@ -20,7 +20,7 @@ const CategoriesContainer = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:3777/api/get-categories');
+                const response = await axios.get('http://localhost:10000/api/get-categories');
                 setCategories(response.data);
             } catch (error) {
                 console.error('Error fetching categories:', error);
@@ -47,7 +47,7 @@ const CategoriesContainer = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await axios.delete(`http://localhost:3777/api/delete-category/${categoryId}`);
+                    const response = await axios.delete(`http://localhost:10000/api/delete-category/${categoryId}`);
                     Swal.fire({
                         icon: 'success',
                         title: response.data.message
@@ -69,7 +69,7 @@ const CategoriesContainer = () => {
         const newName = prompt('Enter the new category name:', currentCategoryName);
         if (newName) {
             try {
-                const response = await axios.put(`http://localhost:3777/api/update-category/${categoryId}`, { name: newName });
+                const response = await axios.put(`http://localhost:10000/api/update-category/${categoryId}`, { name: newName });
                 Swal.fire({
                     icon: 'success',
                     title: response.data.message

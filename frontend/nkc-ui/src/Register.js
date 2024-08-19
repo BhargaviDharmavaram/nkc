@@ -30,7 +30,7 @@ const Register = () => {
       return;
     }
     try {
-      await axios.post('http://localhost:3777/api/register', formData);
+      await axios.post('http://localhost:10000/api/register', formData);
       Swal.fire({
             icon: "success",
             title: "Registration Successful!",

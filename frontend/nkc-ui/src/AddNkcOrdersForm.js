@@ -31,7 +31,7 @@ const AddNKCOrdersForm = ({ addOrder }) => {
         };
         console.log('formadta-nkc-orders-add', formData)
         try {
-            const response = await axios.post('http://localhost:3777/api/add-productsOrders', formData);
+            const response = await axios.post('http://localhost:10000/api/add-productsOrders', formData);
             console.log('Response from server:', response.data);
             // Swal.fire({
             //     icon: 'success',
