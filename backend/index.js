@@ -65,11 +65,11 @@ app.get('/api/summary/year', summaryController.getDataForYear);
 app.get('/api/summary/month', summaryController.getDataForMonth);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../frontend/nkc-ui/build')));
+app.use(express.static(path.join(__dirname, './frontend/nkc-ui/build')));
 
 // Handle any non-API requests by serving the React app
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/nkc-ui/build', 'index.html'));
+  res.sendFile(path.join(__dirname, './frontend/nkc-ui/build', 'index.html'));
 });
 
 const port = process.env.PORT || 10000;
