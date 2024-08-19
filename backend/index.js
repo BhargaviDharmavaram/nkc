@@ -58,7 +58,7 @@ app.get('/api/get-total-earnings-based-on-year-or-month',dailyEarningsController
 app.get('/api/summary/year', summaryController.getDataForYear);
 app.get('/api/summary/month', summaryController.getDataForMonth);
 
-const port = process.env.PORT || 3777;
+const port = process.env.PORT || 10000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
