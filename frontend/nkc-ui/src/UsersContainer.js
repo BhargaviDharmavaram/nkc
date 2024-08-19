@@ -18,7 +18,7 @@ const UsersContainer = (props) => {
     const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
-        axios.get('http://localhost:3777/api/get-users')
+        axios.get('https://nkc-6nv4.onrender.com/api/get-users')
             .then((res) => {
                 console.log("users", res.data); // array of objects
                 setUsers(res.data);

@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Chart } from 'react-google-charts';
 import { Box, Typography, Grid, Card, CardContent, Dialog, DialogTitle, DialogContent, Button, DialogActions, CardHeader, Avatar, TextField, Paper } from '@mui/material';
-import { makeStyles, useTheme } from '@mui/styles';
+//import { makeStyles, useTheme } from '@mui/styles';
+import styled from '@emotion/styled';
+import { useTheme } from '@emotion/react';
 import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -10,57 +12,101 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import ExpensesCurrentMonthTotal from './ExpensesMonthlyTotalAmount';
 import EarningsCurrentMonthTotal from './EarningsMonthlyTotalAmount'
 
-const useStyles = makeStyles({
-    card: {
-      position: 'relative',
-      overflow: 'visible',
-      cursor: 'pointer',
-      marginBottom: '1rem',
-      '&:hover': {
+// const useStyles = makeStyles({
+//     card: {
+//       position: 'relative',
+//       overflow: 'visible',
+//       cursor: 'pointer',
+//       marginBottom: '1rem',
+//       '&:hover': {
+//         boxShadow: '0 20px 30px rgba(0, 0, 0, 0.12)',
+//       },
+//     },
+//     cardHeader: {
+//       color: '#d81b60',
+//       paddingBottom: '0',
+//     },
+//     iconWrapper: {
+    //   position: 'absolute',
+    //   top: '-0.2rem', // Adjusted to make the icon more visible
+    //   left: '1rem',
+    //   width: '4rem',
+    //   height: '4rem',
+    //   borderRadius: '50%',
+    //   display: 'flex',
+    //   justifyContent: 'center',
+    //   alignItems: 'center',
+    //   backgroundColor: '#d81b60',
+    //   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+//     },
+//     icon: {
+//       fontSize: '2rem', // Increased font size for better visibility
+//       color: '#fff', // Set color to white for better contrast
+//     },
+//     cardFooter: {
+//       padding: '0.75rem 1.5rem',
+//     },
+//     textPrimary: {
+//       fontSize: '4rem',
+//       color: '#d81b60',
+//     },
+//     textSecondary: {
+//       color: '#ff9800',
+//     },
+//     textSuccess: {
+//       color: '#4caf50',
+//     },
+//     textInfo: {
+//       color: '#00bcd4',
+//     },
+//   });
+
+// Styled components using Emotion
+const StyledCard = styled(Card)(({ theme }) => ({
+    position: 'relative',
+    overflow: 'visible',
+    cursor: 'pointer',
+    marginBottom: '1rem',
+    '&:hover': {
         boxShadow: '0 20px 30px rgba(0, 0, 0, 0.12)',
-      },
     },
-    cardHeader: {
-      color: '#d81b60',
-      paddingBottom: '0',
-    },
-    iconWrapper: {
-      position: 'absolute',
-      top: '-0.2rem', // Adjusted to make the icon more visible
-      left: '1rem',
-      width: '4rem',
-      height: '4rem',
-      borderRadius: '50%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#d81b60',
-      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-    },
-    icon: {
-      fontSize: '2rem', // Increased font size for better visibility
-      color: '#fff', // Set color to white for better contrast
-    },
-    cardFooter: {
-      padding: '0.75rem 1.5rem',
-    },
-    textPrimary: {
-      fontSize: '4rem',
-      color: '#d81b60',
-    },
-    textSecondary: {
-      color: '#ff9800',
-    },
-    textSuccess: {
-      color: '#4caf50',
-    },
-    textInfo: {
-      color: '#00bcd4',
-    },
-  });
+}));
+
+const CardHeaderStyled = styled(CardHeader)(({ theme }) => ({
+    color: '#d81b60',
+    paddingBottom: '0',
+}));
+
+const IconWrapper = styled(Avatar)(({ theme }) => ({
+    position: 'absolute',
+    top: '-0.2rem',
+    left: '1rem',
+    width: '4rem',
+    height: '4rem',
+    borderRadius: '50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#d81b60',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+}));
+
+const Icon = styled(AccountBalanceIcon)(({ theme }) => ({
+    fontSize: '2rem',
+    color: '#fff',
+}));
+
+const TextPrimary = styled(Typography)(({ theme }) => ({
+    fontSize: '4rem',
+    color: '#d81b60',
+}));
+
+const TextSuccess = styled(Typography)(({ theme }) => ({
+    color: '#4caf50',
+}));
 
 const Home = () => {
-    const classes = useStyles();
+    //const classes = useStyles();
     const theme = useTheme();
     const [totalEarningsAmount, setTotalEarningsAmount] = useState(0);
     const [totalExpensesAmount, setTotalExpensesAmount] = useState(0);
@@ -346,7 +392,7 @@ const Home = () => {
         <Box p={3}>
             <Box marginBottom={3}>
                 <Typography 
-                    className={`${classes.textPrimary}`}  variant="h2" gutterBottom>
+                    variant="h2" gutterBottom>
                         Financial Dashboard - {formatHeading()}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
@@ -377,7 +423,7 @@ const Home = () => {
             </Box>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={4}>
-                            <Card className={`${classes.card} ${classes.textPrimary}`} onClick={handleExpensesCardClick}>
+                            {/* <Card className={`${classes.card} ${classes.textPrimary}`} onClick={handleExpensesCardClick}>
                                 <CardHeader
                                     className={classes.cardHeader}
                                     avatar={
@@ -394,10 +440,21 @@ const Home = () => {
                                 <CardContent>
                                     <Typography variant="h4">Rs.{totalExpensesAmount}</Typography>
                                 </CardContent>
-                            </Card>
+                            </Card> */}
+                            <StyledCard onClick={handleExpensesCardClick}>
+                        <CardHeaderStyled 
+                            sx={{ fontSize: 35, ml: 12}}
+                            title="Total Expenses" />
+                        <IconWrapper>
+                            <Icon />
+                        </IconWrapper>
+                        <CardContent>
+                            <TextPrimary>{totalExpensesAmount}</TextPrimary>
+                        </CardContent>
+                    </StyledCard>
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <Card className={`${classes.card} ${classes.textPrimary}`} onClick={handleEarningsCardClick}>
+                            {/* <Card className={`${classes.card} ${classes.textPrimary}`} onClick={handleEarningsCardClick}>
                                 <CardHeader
                                     className={classes.cardHeader}
                                     avatar={
@@ -414,10 +471,21 @@ const Home = () => {
                                 <CardContent>
                                     <Typography variant="h4">Rs.{totalEarningsAmount}</Typography>
                                 </CardContent>
-                            </Card>
+                            </Card> */}
+                            <StyledCard onClick={handleEarningsCardClick}>
+                        <CardHeaderStyled 
+                        sx={{ fontSize: 35, ml: 12}}
+                        title="Total Earnings" />
+                        <IconWrapper>
+                            <Icon />
+                        </IconWrapper>
+                        <CardContent>
+                            <TextPrimary>{totalEarningsAmount}</TextPrimary>
+                        </CardContent>
+                    </StyledCard>
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <Card className={`${classes.card} ${classes.textSuccess}`}>
+                            {/* <Card className={`${classes.card} ${classes.textSuccess}`}>
                                 <CardHeader
                                     className={classes.cardHeader}
                                     avatar={
@@ -434,7 +502,18 @@ const Home = () => {
                                 <CardContent>
                                     <Typography variant="h4">Rs.{totalNKCOrdersAmount}</Typography>
                                 </CardContent>
-                            </Card>
+                            </Card> */}
+                            <StyledCard>
+                        <CardHeaderStyled 
+                        sx={{ fontSize: 35, ml: 12}}
+                        title="NKC Orders" />
+                        <IconWrapper>
+                            <Icon />
+                        </IconWrapper>
+                        <CardContent>
+                            <TextPrimary>{totalNKCOrdersAmount}</TextPrimary>
+                        </CardContent>
+                    </StyledCard>
                         </Grid>
             </Grid>
             <Grid container spacing={2}>
@@ -622,3 +701,5 @@ const Home = () => {
 };
 
 export default Home;
+
+
