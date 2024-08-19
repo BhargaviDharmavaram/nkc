@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path');
 require('dotenv').config();
 const cors = require('cors')
 const configureDB = require('./config/db')
@@ -21,10 +22,7 @@ app.use(cors({
 configureDB()
 
 app.post('/api/register', authenticationControllers.register);
-app.post('/api/login', authenticationControllers.login, (req, res) => {
-  // Assuming authenticationControllers.login handles the login logic
-  res.redirect('https://nkc-1.onrender.com/home');
-});
+app.post('/api/login', authenticationControllers.login);
 // Account route (protected)
 app.get('/api/account', authenticateUser, authenticationControllers.account);
 // Edit user route (protected)
@@ -65,6 +63,14 @@ app.get('/api/get-total-earnings-based-on-year-or-month',dailyEarningsController
 
 app.get('/api/summary/year', summaryController.getDataForYear);
 app.get('/api/summary/month', summaryController.getDataForMonth);
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../frontend/nkc-ui/build')));
+
+// Handle any non-API requests by serving the React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/nkc-ui/build', 'index.html'));
+});
 
 const port = process.env.PORT || 10000;
 app.listen(port, () => {

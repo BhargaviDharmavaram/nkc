@@ -19,6 +19,7 @@
     "moment": "^2.30.1",
     "mongoose": "^8.0.0",
     "mongoose-unique-validator": "^5.0.1",
+    "path": "^0.12.7",
     "validator": "^13.12.0"
   }
 }
