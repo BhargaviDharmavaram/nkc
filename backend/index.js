@@ -12,11 +12,19 @@ const authenticationControllers = require('./app/controllers/authenticationContr
 const authenticateUser = require('./app/middlewares/authentication')
 const app = express()
 app.use(express.json())
-app.use(cors())
+
+app.use(cors({
+  origin: 'https://nkc-1.onrender.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 configureDB()
 
 app.post('/api/register', authenticationControllers.register);
-app.post('/api/login', authenticationControllers.login);
+app.post('/api/login', authenticationControllers.login, (req, res) => {
+  // Assuming authenticationControllers.login handles the login logic
+  res.redirect('https://nkc-1.onrender.com/home');
+});
 // Account route (protected)
 app.get('/api/account', authenticateUser, authenticationControllers.account);
 // Edit user route (protected)
