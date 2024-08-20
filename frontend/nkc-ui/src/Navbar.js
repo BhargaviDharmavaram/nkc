@@ -220,7 +220,7 @@ const NavBar = ({ onToggleTheme }) => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login'); // Redirect to login page after logout
+    //navigate('/login'); // Redirect to login page after logout
   };
 
   // Conditionally render content based on the current route

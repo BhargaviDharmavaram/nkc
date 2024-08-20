@@ -1,9 +1,13 @@
 import React, { createContext, useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+
+  const navigate = useNavigate()
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -28,7 +32,7 @@ export const AuthProvider = ({ children }) => {
       if (result.isConfirmed) {
         localStorage.removeItem('token');
         setIsAuthenticated(false);
-        //navigate('/login'); // Redirect to login page
+        navigate('/login'); // Redirect to login page
         Swal.fire('Logged out!', 'You have been logged out successfully.', 'success');
       }
     });
