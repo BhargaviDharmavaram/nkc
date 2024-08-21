@@ -22,6 +22,34 @@ const Login = () => {
     return errors;
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const validationErrors = validate();
+  //   if (Object.keys(validationErrors).length > 0) {
+  //     setErrors(validationErrors);
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.post('http://localhost:10000/api/login', formData);
+  //     login(response.data.token); // Update auth context
+  //     console.log('Login successful, navigating to home...');
+  //     Swal.fire({
+  //       icon: "success",
+  //       title: "Welcome back!",
+  //       text: "You have successfully logged in.",
+  //       })
+  //     navigate('/home'); // Redirect to home page
+  //   } catch (error) {
+  //     console.error('Login error:', error);
+  //     setErrors({ general: 'Invalid email or password' });
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Invalid credentials",
+  //       text: error.response?.data?.errors
+  //       })
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
@@ -29,16 +57,23 @@ const Login = () => {
       setErrors(validationErrors);
       return;
     }
-
+  
     try {
       const response = await axios.post('http://localhost:10000/api/login', formData);
-      login(response.data.token); // Update auth context
-      console.log('Login successful, navigating to home...');
+      const token = response.data.token;
+  
+      // Save the token to localStorage
+      localStorage.setItem('authToken', token);
+  
+      // Update the AuthContext with the new token
+      login(token);
+  
+      // Show success message and navigate to home
       Swal.fire({
         icon: "success",
         title: "Welcome back!",
         text: "You have successfully logged in.",
-        })
+      });
       navigate('/home'); // Redirect to home page
     } catch (error) {
       console.error('Login error:', error);
@@ -46,11 +81,11 @@ const Login = () => {
       Swal.fire({
         icon: "error",
         title: "Invalid credentials",
-        text: error.response?.data?.errors
-        })
+        text: error.response?.data?.errors || "An error occurred",
+      });
     }
   };
-
+  
   return (
     <Container maxWidth="xs">
       <Box sx={{ mt: 8 }}>
