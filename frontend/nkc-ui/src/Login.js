@@ -31,7 +31,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:10000/api/login', formData);
+      const response = await axios.post('https://nkc-6nv4.onrender.com/api/login', formData);
       login(response.data.token); // Update auth context
       console.log('Login successful, navigating to home...');
       Swal.fire({

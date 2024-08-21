@@ -30,7 +30,7 @@ const Register = () => {
       return;
     }
     try {
-      await axios.post('http://localhost:10000/api/register', formData);
+      await axios.post('https://nkc-6nv4.onrender.com/api/register', formData);
       Swal.fire({
             icon: "success",
             title: "Registration Successful!",
