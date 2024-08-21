@@ -45,7 +45,7 @@ authenticationControllers.login = async (req,res) => {
                 }
                 
                 console.log('tokendata-login', tokenData)
-                const token = jwt.sign(tokenData , process.env.JWT_SECRET, { expiresIn: '1h' })
+                const token = jwt.sign(tokenData , process.env.JWT_SECRET)
                 res.json({
                     token : `Bearer ${token}`
                 })
