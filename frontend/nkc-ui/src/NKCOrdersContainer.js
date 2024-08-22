@@ -26,7 +26,7 @@ const NKCOrdersContainer = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get('http://localhost:10000/api/get-productsOrders');
+                const response = await axios.get('https://nkc-6nv4.onrender.com/api/get-productsOrders');
                 console.log("orders", response.data); // array of objects
                 setOrders(response.data);
             } catch (error) {
@@ -53,7 +53,7 @@ const NKCOrdersContainer = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await axios.delete(`http://localhost:10000/api/delete-productsOrders/${orderId}`);
+                    const response = await axios.delete(`https://nkc-6nv4.onrender.com/api/delete-productsOrders/${orderId}`);
                     Swal.fire({
                         icon: 'success',
                         title: response.data.message
@@ -78,7 +78,7 @@ const NKCOrdersContainer = () => {
         if (newDate && newAmount && newOrderType) {
             try {
                 const updatedOrder = { date: newDate, amount: newAmount, type: newOrderType };
-                const response = await axios.put(`http://localhost:10000/api/update-productsOrders/${orderId}`, updatedOrder);
+                const response = await axios.put(`https://nkc-6nv4.onrender.com/api/update-productsOrders/${orderId}`, updatedOrder);
                 const updatedOrders = orders.map(order => {
                     if (order._id === orderId) {
                         return response.data.productOrder;

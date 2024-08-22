@@ -24,7 +24,7 @@ const EarningsContainer = () => {
 
     const fetchTotalEarningsForCurrentMonth = async (month, year) => {
         try {
-            const response = await axios.get('http://localhost:10000/api/get-total-earnings-based-on-year-or-month', {
+            const response = await axios.get('https://nkc-6nv4.onrender.com/api/get-total-earnings-based-on-year-or-month', {
                 params: { month, year }
             });
             setTotalAmount(response.data.totalAmount);
@@ -44,7 +44,7 @@ const EarningsContainer = () => {
         console.log('while adding earnings - date', date, 'amount', amount);
         try {
             const formattedDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())).toISOString().split('T')[0]; // Format date to YYYY-MM-DD
-            const response = await axios.post('http://localhost:10000/api/add-daily-earnings', {
+            const response = await axios.post('https://nkc-6nv4.onrender.com/api/add-daily-earnings', {
                 date: formattedDate,
                 amount
             });
@@ -83,7 +83,7 @@ const EarningsContainer = () => {
     useEffect(() => {
         const fetchEarnings = async () => {
             try {
-                const response = await axios.get('http://localhost:10000/api/get-earnings');
+                const response = await axios.get('https://nkc-6nv4.onrender.com/api/get-earnings');
                 if (Array.isArray(response.data.earnings)) {
                     setEarnings(response.data.earnings);
                 } else {
@@ -109,7 +109,7 @@ const EarningsContainer = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await axios.delete(`http://localhost:10000/api/delete-earning/${earningId}`);
+                    const response = await axios.delete(`https://nkc-6nv4.onrender.com/api/delete-earning/${earningId}`);
                     Swal.fire({
                         icon: 'success',
                         title: response.data.message
@@ -132,7 +132,7 @@ const EarningsContainer = () => {
         if (newAmount) {
             try {
                 const updatedOrder = { amount: newAmount };
-                const response = await axios.put(`http://localhost:10000/api/update-earning/${earningId}`, updatedOrder);
+                const response = await axios.put(`https://nkc-6nv4.onrender.com/api/update-earning/${earningId}`, updatedOrder);
                 Swal.fire({
                     icon: 'success',
                     title: response.data.message

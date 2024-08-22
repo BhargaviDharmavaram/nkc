@@ -150,7 +150,7 @@ const Home = () => {
             const month = currentDate.getMonth() + 1;
             const year = currentDate.getFullYear();
             try {
-                const response = await axios.get('http://localhost:10000/api/get-total-earnings-based-on-year-or-month', {
+                const response = await axios.get('https://nkc-6nv4.onrender.com/api/get-total-earnings-based-on-year-or-month', {
                     params: { month, year }
                 });
                 setTotalEarningsAmount(response.data.totalAmount);
@@ -164,7 +164,7 @@ const Home = () => {
     useEffect(() => {
         const fetchCurrentMonthExpensesTotal = async () => {
             try {
-                const response = await axios.get('http://localhost:10000/api/current-month-total-expenses');
+                const response = await axios.get('https://nkc-6nv4.onrender.com/api/current-month-total-expenses');
                 const { totalAmount, breakdown } = response.data;
                 setTotalExpensesAmount(totalAmount);
                 setExpensesBreakdown(breakdown)
@@ -178,7 +178,7 @@ const Home = () => {
     useEffect(() => {
         const fetchTotalOrdersAmount = async () => {
             try {
-                const response = await axios.get('http://localhost:10000/api/current-month-total-orders-amount');
+                const response = await axios.get('https://nkc-6nv4.onrender.com/api/current-month-total-orders-amount');
                 setTotalNKCOrdersAmount(response.data.totalAmount);
             } catch (error) {
                 console.error('Error fetching current month total orders amount:', error);
@@ -198,7 +198,7 @@ const Home = () => {
 
     const fetchDataForMonth = async (month, year) => {
         try {
-            const response = await axios.get('http://localhost:10000/api/summary/month', {
+            const response = await axios.get('https://nkc-6nv4.onrender.com/api/summary/month', {
                 params: { month, year }
             });
             console.log('month-res', response.data);
@@ -216,7 +216,7 @@ const Home = () => {
 
     const fetchDataForYear = async (year) => {
         try {
-            const response = await axios.get('http://localhost:10000/api/summary/year', {
+            const response = await axios.get('https://nkc-6nv4.onrender.com/api/summary/year', {
                 params: { year }
             });
             console.log('year-report',response.data)

@@ -14,7 +14,7 @@ const ExpensesSummary = () => {
 
     const fetchTotalExpenses = async (date, month, year) => {
         try {
-            const response = await axios.get('http://localhost:10000/api/total-expenses', {
+            const response = await axios.get('https://nkc-6nv4.onrender.com/api/total-expenses', {
                 params: { date, month, year }
             });
             setTotalAmount(response.data.totalAmount);

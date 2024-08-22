@@ -12,7 +12,7 @@ const EarningsSummary = () => {
 
     const fetchTotalEarnings = async (month, year) => {
         try {
-            const response = await axios.get('http://localhost:10000/api/get-total-earnings-based-on-year-or-month', {
+            const response = await axios.get('https://nkc-6nv4.onrender.com/api/get-total-earnings-based-on-year-or-month', {
                 params: { month, year }
             });
             setTotalAmount(response.data.totalAmount);

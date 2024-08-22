@@ -37,7 +37,7 @@ const AccountForm = ({ userData, onCancel, onUpdate }) => {
     setLoading(true);
     setError(null);
     try {
-        const response = await axios.put(`http://localhost:10000/api/update/${userData.id}`, formData, {
+        const response = await axios.put(`https://nkc-6nv4.onrender.com/api/update/${userData.id}`, formData, {
             headers: {
               'x-auth': localStorage.getItem('token')
             }
